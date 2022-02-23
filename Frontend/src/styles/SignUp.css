@@ -1,11 +1,12 @@
 .signup-form{
     border: 3px solid black;
-    width:35vw;
-    height:82vh;
+    width:30vw;
+    height:75vh;
     border-radius: 15px;
     padding-left: 1.2em;
     padding-right: 1.2em;
     background-color: white;
+    border-width: 0vh;
 }
 .signup-component{
     height: 100vh;
@@ -24,17 +25,18 @@
 }
 .input-data{
     padding:0.3em;
-    font-size: 1.2em;
-    border:2px solid grey;
+    font-size: 1.1em;
+    border:1.5px solid grey;
     border-radius: 7px;
     outline: none;
     box-shadow: none;
+    font-size:medium;
 }
 .other-row .input-data{
     width:100%;
 }
 .row-1 .input-data{
-    width:45%;
+    width:44%;
 }
 .row-1{
     display: flex;
@@ -77,7 +79,8 @@
 .link-signin{
     text-decoration: none;
     font-weight: bolder;
-    color:blue;
+    font-style:italic;
+    color:black;
 }
 .link-signin:focus{
     color: rgb(5, 5, 150);
@@ -86,4 +89,8 @@
     margin-left: -25px;
     padding-right: 5px;
     cursor: pointer;
+}
+.input-data::placeholder{
+  font-size:medium;
+  color:rgba(128, 128, 128, 0.8);
 }

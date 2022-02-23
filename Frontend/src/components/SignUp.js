@@ -43,7 +43,7 @@
     
     <form className='signup-form'>
       <div className='line'>
-      <h2>Create A New Account</h2>
+      <h2>Create Account</h2>
       <h4>{fName}&nbsp;{lName}</h4>
       </div>
       <div className='form-values'>
