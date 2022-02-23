@@ -1,7 +1,7 @@
   import React, { useState } from 'react'
   import '../styles/SignUp.css'
 
-  export const SignUp = () => {
+export const SignUp = () => {
 
   const [isVisible, setVisible] = useState(false);
   const [fName, setFName] = useState("");
@@ -9,6 +9,27 @@
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cPassword, setCPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    console.log("run...")
+    e.preventDefault();
+    const response = await fetch("http://localhost:8000/api/auth/register", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name : fName + " " + lName , email, password})
+    });
+    const json = await response.json()
+    console.log(json);
+    if (json.success){
+        console.log("register Successfull")
+    }
+    else{
+        console.log(json);
+        alert("Invalid credentials");
+    }
+  }
 
   const togglePass= () =>{
     const password = document.querySelector('#id_password');
@@ -41,7 +62,7 @@
     <>
     <div className="signup-component">
     
-    <form className='signup-form'>
+    <form className='signup-form' onSubmit={handleSubmit}>
       <div className='line'>
       <h2>Create A New Account</h2>
       <h4>{fName}&nbsp;{lName}</h4>
@@ -72,4 +93,4 @@
     </div>
     </>
     )
-  }
+}
