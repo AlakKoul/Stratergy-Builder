@@ -1,4 +1,41 @@
-.nav-main{
-    position: fixed;
+nav{
+    position: sticky;
     top:0%;
+    background-color: #658f9aaf;
+    padding:0.6em;
+}
+.logo{
+    color:#b36f4c;
+    font-weight: 5000;
+}
+.nav-list{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;    
+    list-style: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.goto-login-text{
+    border-radius: 7px;
+    padding:0.5em 1em;
+    border: 2px solid #559aaa;
+    background: white;
+    outline: none;
+    box-shadow: none;
+    text-decoration: none;
+    font-weight: bolder;
+    font-size:large;
+    color: #559aaa;
+}
+.goto-login-text:focus{
+    color: rgb(5, 5, 150);
+}
+.goto-login-text:hover {
+    border: 2px solid #559aaa;
+    background: #559aaa;
+    cursor: pointer;
+    color:white;
+    transition: all 0.4s ease-in-out;
+    color:white;
 }

@@ -1,5 +1,6 @@
   import React, { useState } from 'react'
-  import '../styles/SignUp.css'
+  import {Link} from "react-router-dom";
+  import '../styles/LoginAndSignUp.css'
 
 export const SignUp = () => {
 
@@ -12,7 +13,7 @@ export const SignUp = () => {
 
   const handleSubmit = async (e) => {
     console.log("run...")
-    e.preventDefault();
+    e.preventDefault(); //so that page should not refresh
     const response = await fetch("http://localhost:8000/api/auth/register", {
         method: 'POST',
         headers: {
@@ -43,19 +44,19 @@ export const SignUp = () => {
     }
   }
 
-  const changeFName = (event)=>{
+  const enterFName = (event)=>{
       setFName(event.target.value);
   }
-  const changeLName = (event)=>{
+  const enterLName = (event)=>{
       setLName(event.target.value);
   }
-  const changeEmail = (event)=>{
+  const enterEmail = (event)=>{
       setEmail(event.target.value);
   }
-  const changePassword = (event)=>{
+  const enterPassword = (event)=>{
       setPassword(event.target.value);
   }
-  const changeCPassword = (event)=>{
+  const enterCPassword = (event)=>{
       setCPassword(event.target.value);
   }
     return (
@@ -69,24 +70,24 @@ export const SignUp = () => {
       </div>
       <div className='form-values'>
       <div className='rows row-1'>
-      <input type="text" placeholder='First Name' value={fName} onChange={changeFName} className='input-data' required/>
-      <input type="text" placeholder='Last Name' value={lName} onChange={changeLName} className='input-data' required/>
+      <input type="text" placeholder='First Name' value={fName} onChange={enterFName} className='input-data' required/>
+      <input type="text" placeholder='Last Name' value={lName} onChange={enterLName} className='input-data' required/>
       </div>
       <div className='rows other-row'>
-      <input type="email" placeholder='Email' value={email} onChange={changeEmail} className='input-data' required/>
+      <input type="email" placeholder='Email' value={email} onChange={enterEmail} className='input-data' required/>
       </div>
       <div className='rows other-row'>
-      <input type="password" placeholder='Password' value={password} onChange={changePassword} className='input-data' id= "id_password" required minLength={8}/>
+      <input type="password" placeholder='Password' value={password} onChange={enterPassword} className='input-data' id= "id_password" required minLength={8}/>
       <i className={`fa-solid toggle ${!isVisible?'fa-eye':'fa-eye-slash'}`} id="togglePassword" onClick={togglePass}></i>
       </div>
       <div className='rows other-row'>
-      <input type="password" placeholder='Confirm Password' value={cPassword} onChange={changeCPassword} className='input-data' required/>
+      <input type="password" placeholder='Confirm Password' value={cPassword} onChange={enterCPassword} className='input-data' required/>
       </div>
       <div className='row row-button other-row'>
       <button type="submit" className="signup-btn">SignUp</button>
       </div>
       <div className='goto-login'>
-          <p>Already have an account?&nbsp;<a href='/' className='link-signin'>Login</a></p>
+          <p>Already have an account?&nbsp;<Link to='/login' className='link-login'>Login</Link></p>
       </div>
       </div>
     </form>
