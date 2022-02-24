@@ -1,8 +1,10 @@
 import React from 'react'
 import '../styles/Navbar.css'
-import {Link} from "react-router-dom";
+import {Link,useLocation} from "react-router-dom";
 export const Navbar = () => {
-  return (
+  let location = useLocation();
+  console.log(location);
+    return (
     <>
     <nav>
       <ul className='nav-list'>
@@ -12,7 +14,7 @@ export const Navbar = () => {
             </span></h1>
         </li>
         <li>
-          <Link className='goto-login-text' to='/login'>Login</Link>
+          <Link className='goto-login-text' to={`${location.pathname==='/'?'/login':'/'}`}>{location.pathname==='/'?'Login':'Signup'}</Link>
         </li>
       </ul>
     </nav>
