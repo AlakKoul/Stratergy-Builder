@@ -1,4 +1,4 @@
-  import React, { useState } from 'react'
+  import React, { useEffect, useState } from 'react'
   import {Link} from "react-router-dom";
   import '../styles/LoginAndSignUp.css'
 
@@ -59,6 +59,22 @@ export const SignUp = () => {
   const enterCPassword = (event)=>{
       setCPassword(event.target.value);
   }
+
+  useEffect(() => {
+      const passwordId = document.querySelector('#id_password');
+      const cPasswordId = document.querySelector('#id_cPassword');
+      if(password!='' && cPassword!=''){
+      if(password==cPassword){
+        passwordId.style.border = '2px solid #27d632';
+        cPasswordId.style.border = '2px solid #27d632';
+      }
+      else{
+        passwordId.style.border = '2px solid red';
+        cPasswordId.style.border = '2px solid red';
+      }
+    }  
+  }, [cPassword])
+  
     return (
     <>
     <div className="signup-component">
@@ -81,7 +97,7 @@ export const SignUp = () => {
       <i className={`fa-solid toggle ${!isVisible?'fa-eye':'fa-eye-slash'}`} id="togglePassword" onClick={togglePass}></i>
       </div>
       <div className='rows other-row'>
-      <input type="password" placeholder='Confirm Password' value={cPassword} onChange={enterCPassword} className='input-data' required/>
+      <input type="password" placeholder='Confirm Password' value={cPassword} onChange={enterCPassword} className='input-data' id='id_cPassword' required/>
       </div>
       <div className='row row-button other-row'>
       <button type="submit" className="signup-btn">SignUp</button>

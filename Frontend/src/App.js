@@ -3,6 +3,7 @@ import './App.css';
 import { Navbar } from './components/Navbar';
 import { SignUp } from './components/SignUp';
 import { Login } from './components/Login';
+import { Home } from "./components/Home";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
       </Route>
       <Route exact path="/login">
         <Login/>
+      </Route>
+      <Route exact path="/home">
+        <Home/>
       </Route>
     </Switch>
     </Router>

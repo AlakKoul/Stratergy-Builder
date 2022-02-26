@@ -29,7 +29,10 @@ nav{
     color: #559aaa;
 }
 .goto-login-text:focus{
-    color: rgb(5, 5, 150);
+    color: #559aaa;
+}
+.goto-login-text:active{
+    color: #559aaa;
 }
 .goto-login-text:hover {
     border: 2px solid #559aaa;
