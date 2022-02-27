@@ -3,7 +3,6 @@ import '../styles/Navbar.css'
 import {Link,useLocation} from "react-router-dom";
 export const Navbar = () => {
   let location = useLocation();
-  console.log(location);
     return (
     <>
     <nav>
@@ -12,9 +11,6 @@ export const Navbar = () => {
           <h1 className='logo'>Stratergy Builder <span className="fa-rotate-by" style={{'display':'inline-block', '--fa-rotate-angle':'135deg'}}>
             <i className="fa-solid fa-share fa-flip-horizontal "></i>
             </span></h1>
-        </li>
-        <li>
-          <Link  to='/home'>Home</Link>
         </li>
         <li>
           <Link className='goto-login-text' to={`${location.pathname==='/'?'/login':'/'}`}>{location.pathname==='/'?'Login':'Signup'}</Link>

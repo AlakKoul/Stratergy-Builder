@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import '../styles/LoginAndSignUp.css'
 
 export const Login = () => {
+  const history = useHistory();
   const [isVisible, setVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,11 +25,35 @@ export const Login = () => {
   const enterPassword = (event)=>{
       setPassword(event.target.value);
   }
+
+  // const handleSubmit = async (e)=>{
+  //   e.preventDefault(); 
+  //   const response = await fetch("http://localhost:8000/api/auth/login", {
+  //       method: 'POST',
+  //       headers: {
+  //           'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({email, password})
+  //   });
+  //   const json = await response.json()
+  //   console.log(json);
+  //   if (json.success){
+  //       console.log("Login Successfull");
+  //   }
+  //   else{
+  //       console.log(json);
+  //       alert("Invalid credentials");
+  //   }
+  // }
+  const handleSubmit = (e) =>{
+    e.preventDefault(); 
+    history.push('/home');
+  }
   return (
     <>
     <div className="login-component">
     
-    <form className='login-form'>
+    <form className='login-form' onSubmit={handleSubmit}>
       <div className='line'>
       <h2>Login</h2>
       </div>
