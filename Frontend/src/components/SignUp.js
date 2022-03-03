@@ -63,8 +63,8 @@ export const SignUp = () => {
   useEffect(() => {
       const passwordId = document.querySelector('#id_password');
       const cPasswordId = document.querySelector('#id_cPassword');
-      if(password!='' && cPassword!=''){
-      if(password==cPassword){
+      if(password!=='' && cPassword!==''){
+      if(password===cPassword){
         passwordId.style.border = '2px solid #27d632';
         cPasswordId.style.border = '2px solid #27d632';
       }
@@ -74,7 +74,50 @@ export const SignUp = () => {
       }
     }  
   }, [cPassword])
-  
+
+  useEffect(() => {
+    let n = password.length;
+    if(n==0){
+      const strong = document.querySelector('.strong');
+      strong.style.display = 'none';
+    }
+    else if(n>0){
+      const strong = document.querySelector('.strong');
+      strong.style.display = 'block';
+      let cntLower=0, cntUpper=0,cntSym=0,cntNum=0;
+      let strength = 0;
+      
+      for(let i = 0; i<n;i++){
+        if(password[i]>='a' && password[i]<='z'){ cntLower=1; }
+        else if(password[i]>='A' && password[i]<='Z'){ cntUpper=1; }
+        else if(password[i]>='0' && password[i]<='9'){ cntNum=1; }
+        else {cntSym=1;}
+        strength = cntLower+cntUpper+cntNum+cntSym;
+      }
+      if(n>=8) strength++;
+      if(strength==1){
+        strong.style.width="20%";
+        strong.style.backgroundColor="red";
+      }
+      else if(strength==2){
+        strong.style.width="40%";
+        strong.style.backgroundColor="yellow";
+      }
+      else if(strength==3){
+        strong.style.width="60%";
+        strong.style.backgroundColor="orange";
+      }
+      else if(strength==4){
+        strong.style.width="80%";
+        strong.style.backgroundColor="lightgreen";
+      }
+      else if(strength==5){
+        strong.style.width="100%";
+        strong.style.backgroundColor="darkgreen";
+      }
+    }
+  }, [password])
+
     return (
     <>
     <div className="signup-component">
@@ -95,6 +138,10 @@ export const SignUp = () => {
       <div className='rows other-row'>
       <input type="password" placeholder='Password' value={password} onChange={enterPassword} className='input-data' id= "id_password" required minLength={8}/>
       <i className={`fa-solid toggle ${!isVisible?'fa-eye':'fa-eye-slash'}`} id="togglePassword" onClick={togglePass}></i>
+      <div class="parent-strong">
+      <div className='strong'> 
+      </div>
+      </div>
       </div>
       <div className='rows other-row'>
       <input type="password" placeholder='Confirm Password' value={cPassword} onChange={enterCPassword} className='input-data' id='id_cPassword' required/>
