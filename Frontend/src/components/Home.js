@@ -1,10 +1,6 @@
 import React from 'react'
 import '../styles/Home.css'
 export const Home = () => {
-    const show = () => {
-        const divId = document.querySelector('#hide');
-        divId.style.display = 'block';
-    }
     const openNavbar = () => {
         const navClose = document.querySelector('.navbar-close');
         const navOpen = document.querySelector('.navbar-open');
@@ -258,13 +254,12 @@ export const Home = () => {
 
                             </select>
                         </div>
-                        <div className='button' >
-                            <button onClick={show} className='next-button' >Next</button>
+                        <div className='select-products'>
+                            <p className='sub-heading-1st'>Expiry Date</p>
+
+                                <input type="date" className='products'/>
                         </div>
                     </div>
-                </div>
-                <div id="hide">
-                    <h4>Upcoming</h4>
                 </div>
             </div>
         </>
