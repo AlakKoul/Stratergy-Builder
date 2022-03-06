@@ -2,9 +2,40 @@
     display: none;
 }
 .main{
-    margin: 8% 10% 3% 10%;
+    margin: 8% 10% 3% 15%;
     width:70vw;
 }
+.nav{
+    position: fixed;
+    top:8%;
+    left :0%;
+    height:100vh;
+    background-color:#8DACB6;
+}
+.navbar-close{
+    width:fit-content;
+}
+.navbar-open{
+    display: none;
+}
+.fa-xmark, .fa-bars{
+    margin:15px 10px;
+}
+.navbar-open{
+    width:14vw;
+}
+
+.side-nav-link{
+    cursor: pointer;
+    padding:15px 10px;
+    display: block;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+} 
+.side-nav-link:hover{
+    background-color:#E4ECF1;
+} 
 .heading{
     font-size: 2rem;
 }

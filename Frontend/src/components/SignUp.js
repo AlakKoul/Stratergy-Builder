@@ -95,23 +95,23 @@ export const SignUp = () => {
         strength = cntLower+cntUpper+cntNum+cntSym;
       }
       if(n>=8) strength++;
-      if(strength==1){
+      if(strength===1){
         strong.style.width="17%";
         strong.style.backgroundColor="red";
       }
-      else if(strength==2){
+      else if(strength===2){
         strong.style.width="34%";
         strong.style.backgroundColor="yellow";
       }
-      else if(strength==3){
+      else if(strength===3){
         strong.style.width="51%";
         strong.style.backgroundColor="orange";
       }
-      else if(strength==4){
+      else if(strength===4){
         strong.style.width="68%";
         strong.style.backgroundColor="lightgreen";
       }
-      else if(strength==5){
+      else if(strength===5){
         strong.style.width="100%";
         strong.style.backgroundColor="darkgreen";
       }
