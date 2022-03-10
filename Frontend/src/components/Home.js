@@ -100,6 +100,31 @@ export const Home = () => {
                                         onChange={handleDetails}
                                     />
                                 </div>
+
+                                <div className='select-products'>
+                                    <p className='sub-heading-1st'>Strategy</p>
+
+                                    <input 
+                                        name="strategy" 
+                                        id="strategy" 
+                                        className='products'  
+                                        type="text" 
+                                        onChange={handleDetails}
+                                    />
+                                </div>
+
+/*
+
+                                export strategy array from api
+
+                                for(let i in strategy){
+                                    options.add(strategy[i].name);
+                                }
+
+
+
+*/
+
                                 <div className='select-products'>
                                         <p className='sub-heading-1st' >Segment</p>
 
