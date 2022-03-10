@@ -173,7 +173,7 @@ export const Home = () => {
                                 </div>
                             </div>
                             <button type='submit' className='next-button'>Add</button>
-                            
+
                         </form>
                     <div className='dtable'>
                         <table>
@@ -181,8 +181,12 @@ export const Home = () => {
                             <tr>
                                 <th>Exchange</th>
                                 <th>Ticker</th>
+                                <th>Segment</th>
                                 <th>Expiry</th>
-                                <th>Expiry</th>    
+                                <th>Side</th>
+                                <th>Quantity</th> 
+                                <th>Strike</th>
+                                <th>Type</th>   
                             </tr>
                             </thead>
                             <tbody>
@@ -190,7 +194,12 @@ export const Home = () => {
                                 <tr>
                                 <td>{detail.exchange}</td>
                                 <td>{detail.ticker}</td>
-                                <td>{detail.expiry}</td>    
+                                <td>{detail.segment}</td>  
+                                <td>{detail.expiry}</td>  
+                                <td>{detail.side}</td>  
+                                <td>{detail.quantity}</td>
+                                <td>{detail.strike}</td>
+                                <td>{detail.type}</td>        
                             </tr>
                             ))}
                             </tbody>
