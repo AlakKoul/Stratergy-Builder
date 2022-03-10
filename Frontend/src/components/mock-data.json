@@ -1,12 +1,20 @@
 [
     {
+        "expiry":"23",
         "exchange":"abc",
         "ticker":"xyz",
-        "expiry":"23"
+        "segment":"aaa",
+        "side":"11",
+        "quantity":"11",
+        "strike":"11",
+        "type":"11"
     },
     {
         "exchange":"abcd",
         "ticker":"xyaz",
-        "expiry":"123"
+        "side":"11",
+        "quantity":"11",
+        "strike":"11",
+        "type":"11"
     }
 ]

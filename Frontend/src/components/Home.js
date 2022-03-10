@@ -7,7 +7,12 @@ export const Home = () => {
     const [addDetails, setAddDetails]=useState({
         exchange:'',
         ticker:'',
-        expiry:''
+        segment:'',
+        expiry:'',
+        side:'',
+        quantity:'',
+        strike:'',
+        type:''
     });
     const handleDetails=(event)=>{
         event.preventDefault();
@@ -25,7 +30,12 @@ export const Home = () => {
             id: nanoid(),
             exchange: addDetails.exchange,
             ticker:addDetails.ticker,
-            expiry:addDetails.expiry
+            segment:addDetails.segment,
+            expiry:addDetails.expiry,
+            side:addDetails.side,
+            quantity:addDetails.quantity,
+            strike:addDetails.strike,
+            type:addDetails.strike
         };
         const newDetails=[...details,newDetail];
         setDetails(newDetails);
@@ -67,50 +77,111 @@ export const Home = () => {
             <div className='home'>
                 <div className='main'>
                     <p className='heading'>Select Products</p>
-                    <div >
-                        <form onSubmit={handleDetailsAdd} className="main-select-products">
-                            <div className='select-products'>
-                                <p className='sub-heading-1st'>Exchange</p>
-                                <input 
-                                    name="exchange" 
-                                    id="exchange" 
-                                    className='products' 
-                                    type="text" 
-                                    placeholder='choose one option'
-                                    onChange={handleDetails}>
-
-                                </input>
-                            </div>
-                            <div className='select-products'>
-                                <p className='sub-heading-1st'>Ticker</p>
-
-                                <input 
-                                    name="ticker" 
-                                    id="ticker" 
-                                    className='products'  
-                                    type="text" 
-                                    placeholder='choose one option'
-                                    onChange={handleDetails}>
-                                    </input>
-                            </div>
-                            <div className='select-products'>
-                                <p className='sub-heading-1st'>Expiry Date</p>
+                        <form onSubmit={handleDetailsAdd} >
+                            <div className="main-select-products">
+                                <div className='select-products'>
+                                    <p className='sub-heading-1st'>Exchange</p>
                                     <input 
-                                    type="date" 
-                                    min={disablePastDate()}
-                                    name="expiry" 
-                                    className='products'
-                                    onChange={handleDetails}/>
+                                        name="exchange" 
+                                        id="exchange" 
+                                        className='products' 
+                                        type="text" 
+                                        onChange={handleDetails}
+                                    />
+                                </div>
+                                <div className='select-products'>
+                                    <p className='sub-heading-1st'>Ticker</p>
+
+                                    <input 
+                                        name="ticker" 
+                                        id="ticker" 
+                                        className='products'  
+                                        type="text" 
+                                        onChange={handleDetails}
+                                    />
+                                </div>
+                                <div className='select-products'>
+                                        <p className='sub-heading-1st' >Segment</p>
+
+                                        <input 
+                                            name="segment" 
+                                            id="segment" 
+                                            className='products'  
+                                            type="text" 
+                                            onChange={handleDetails}>
+                                            </input>
+                                </div>
                             </div>
-                            <button type='submit'>ADD</button>
+                            <button type='button' className='next-button'>Next</button>
+                            <div className='only-option'>
+                                <div className="main-select-products" id='strat'>
+                                    <div className='select-products'>
+                                        <p className='sub-heading-1st'>Expiry Date</p>
+                                            <input 
+                                                type="date" 
+                                                min={disablePastDate()}
+                                                name="expiry" 
+                                                className='products'
+                                                onChange={handleDetails}
+                                            />
+                                    </div>
+                                    <div className='select-products'>
+                                            <p className='sub-heading-1st' >Side</p>
+
+                                            <input 
+                                                name="side" 
+                                                id="side" 
+                                                className='products'  
+                                                type="text" 
+                                                onChange={handleDetails}>
+                                                </input>
+                                    </div>
+                                    <div className='select-products'>
+                                        <p className='sub-heading-1st' >Quantity</p>
+
+                                        <input 
+                                            name="quantity" 
+                                            id="quantity" 
+                                            className='products'  
+                                            type="text" 
+                                            onChange={handleDetails}>
+                                        </input>
+                                    </div>
+                                </div>
+                                <div className="main-select-products">
+                                    <div className='select-products'>
+                                            <p className='sub-heading-1st' >Strike</p>
+
+                                            <input 
+                                                name="strike" 
+                                                id="strike" 
+                                                className='products'  
+                                                type="text" 
+                                                onChange={handleDetails}>
+                                            </input>
+                                    </div>
+                                    <div className='select-products'>
+                                        <p className='sub-heading-1st' >Type</p>
+                                        <input 
+                                            name="type" 
+                                            id="type" 
+                                            className='products'  
+                                            type="text" 
+                                            onChange={handleDetails}>
+                                            </input>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type='submit' className='next-button'>Add</button>
+                            
                         </form>
-                    </div>
                     <div className='dtable'>
                         <table>
                             <thead>
                             <tr>
                                 <th>Exchange</th>
                                 <th>Ticker</th>
+                                <th>Expiry</th>
                                 <th>Expiry</th>    
                             </tr>
                             </thead>
