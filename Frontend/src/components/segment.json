@@ -1,0 +1,14 @@
+[
+    {
+        "id" : "1",
+        "name" : "Future"
+    },
+    {
+        "id" : "2",
+        "name" : "Option"
+    },
+    {
+        "id" : "3",
+        "name" : "Stock"
+    }
+]
