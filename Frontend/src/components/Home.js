@@ -176,7 +176,7 @@ export const Home = () => {
 
                         </form>
                     <div className='dtable'>
-                        <table>
+                        <table className='strategy-table'>
                             <thead>
                             <tr>
                                 <th>Exchange</th>

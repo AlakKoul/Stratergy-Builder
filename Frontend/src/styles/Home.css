@@ -93,3 +93,24 @@
     cursor: pointer;
     transition: all 0.4s ease-in-out;
 }
+.strategy-table{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.strategy-table thead tr{
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.strategy-table th,td {
+    padding: 1em 2.2em;
+}
+.strategy-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.strategy-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3ef;
+}
