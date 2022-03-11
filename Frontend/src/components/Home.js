@@ -50,7 +50,9 @@ export const Home = () => {
     });
     const [custom,setCustom] = useState(true);
     const [strikeAndType,setStrikeAndType] = useState(false);
+
     const handleDetailsNonCustom = (event) => {
+        let strategyID = document.querySelector('#strategy');
         event.preventDefault();
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.value;
@@ -58,7 +60,10 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        setCustom(true);
+        if(strategyID.value==='custom')
+            setCustom(false);
+        else 
+            setCustom(true);
     };
     const handleDetailsStratergy = (event) => {
         //fetch from database update dataVal {}
@@ -92,12 +97,17 @@ export const Home = () => {
     };
     const handleDetailsCustom = (event) => {
         event.preventDefault();
+        let quantityID = document.querySelector('#quantity');
+        if(quantityID.value>9999999) quantityID.value = 9999999;
+        let strikeID = document.querySelector('#strike');
+        if(strikeID.value>10000) strikeID.value = 10000;
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.value;
         const newFormData = { ...addDetails };
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
+
     };
     const handleDetailsAdd = (event) => {
         event.preventDefault();
@@ -266,6 +276,7 @@ export const Home = () => {
                                     className='products'
                                     type="number"
                                     min={0}
+                                    max={9999999}
                                     value={addDetails.quantity}
                                     onChange={handleDetailsCustom}
                                     >
@@ -281,6 +292,7 @@ export const Home = () => {
                                     className='products'
                                     type="number"
                                     min={0}
+                                    max={10000}
                                     value={addDetails.strike}
                                     onChange={handleDetailsCustom}
                                     >

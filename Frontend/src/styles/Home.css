@@ -38,6 +38,7 @@
 } 
 .heading{
     font-size: 2rem;
+    margin-left: 3%;
 }
 .sub-heading-1st{
     color:grey;
@@ -48,10 +49,11 @@
 .main-select-products{
     display: flex;
     margin-top: 1%;
+    justify-content: space-evenly;
 }
 .select-products{
     width:17em;
-    margin-right:3em;
+    margin: 0% 3%;
 }
 .products{
     margin-top: 7%;
@@ -86,6 +88,7 @@
     font-weight: bolder;
     border-width: 0.1em;
     background-color: white;
+    margin-left: 3%;
 }
 .next-button:hover{
     color: white;
@@ -95,17 +98,18 @@
 }
 .strategy-table{
     border-collapse: collapse;
-    margin: 25px 0;
     font-size: 0.9em;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    margin:8% auto;
 }
 .strategy-table thead tr{
     background-color: #009879;
     color: #ffffff;
-    text-align: left;
+    text-align: center;
 }
 .strategy-table th,td {
-    padding: 1em 2.2em;
+    width: 5% ;
+    padding: 1em 1.5em;
 }
 .strategy-table tbody tr {
     border-bottom: 1px solid #dddddd;
@@ -113,4 +117,7 @@
 
 .strategy-table tbody tr:nth-of-type(even) {
     background-color: #f3f3ef;
+}
+.customDiv{
+    display: none;
 }
