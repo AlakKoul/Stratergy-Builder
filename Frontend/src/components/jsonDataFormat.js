@@ -10,11 +10,6 @@ let strategies = [
     }
 ]
 
-
-
-
-
-
 let a = {
     "idStrategy" : "3",
     "name" : "Married Put By Anjali",
@@ -28,24 +23,21 @@ let a = {
             "side":"BUY",
             "quantity":"11",
             "strikePrice":"11",
-            "type":"CALL",
-            "price" : "null"
+            "type":"CALL"
         } , 
         {
             "segment":"future",
             "side":"SELL",
             "quantity":"11",
             "strikePrice":"null",
-            "type":"null",
-            "price" : "null"
+            "type":"null"
         } , 
         {
             "segment":"stock",
             "side":"BUY",
             "quantity":"11",
             "strikePrice":"11",
-            "type":"null",
-            "price" : "null"
+            "type":"null"
         }
     ]
 }

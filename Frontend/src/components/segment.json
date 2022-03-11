@@ -1,7 +1,7 @@
 [
     {
         "id" : "1",
-        "name" : "Future"
+        "name" : "Stock"
     },
     {
         "id" : "2",
@@ -9,6 +9,6 @@
     },
     {
         "id" : "3",
-        "name" : "Stock"
+        "name" : "Future"
     }
 ]

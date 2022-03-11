@@ -11,13 +11,14 @@ import sideData from "./side.json"
 
 
 export const Home = () => {
+    //const dataVal = {type:'',}
     useEffect(() => {
-     let exchangeVal = document.querySelector('#exchange').value;
-     let tickerVal = document.querySelector('#ticker').value;
-     let segmentVal = document.querySelector('#segment').value;
-     let typeVal = document.querySelector('#type').value;
-     let sideVal = document.querySelector('#side').value;
-     let strategyVal = document.querySelector('#strategy').value;
+        let exchangeVal = document.querySelector('#exchange').value;
+        let tickerVal = document.querySelector('#ticker').value;
+        let segmentVal = document.querySelector('#segment').value;
+        let typeVal = document.querySelector('#type').value;
+        let sideVal = document.querySelector('#side').value;
+        let strategyVal = document.querySelector('#strategy').value;
      const newDetail = {
         exchange: exchangeVal,
         ticker: tickerVal,
@@ -27,9 +28,11 @@ export const Home = () => {
         side: sideVal,
         quantity:'',
         strike: '',
-        type: typeVal
+        type: segmentVal!='custom'?'Db segment':typeVal
+        //dataVal update
     };
-     setAddDetails(newDetail);
+    setAddDetails(newDetail);
+    if(segmentVal ==='Future') setStrikeAndType(true);
     }, [])
     
     
@@ -45,7 +48,49 @@ export const Home = () => {
         strike: '',
         type: ''
     });
-    const handleDetails = (event) => {
+    const [custom,setCustom] = useState(true);
+    const [strikeAndType,setStrikeAndType] = useState(false);
+    const handleDetailsNonCustom = (event) => {
+        event.preventDefault();
+        const fieldName = event.target.getAttribute('name');
+        const fieldValue = event.target.value;
+        const newFormData = { ...addDetails };
+        newFormData[fieldName] = fieldValue;
+
+        setAddDetails(newFormData);
+        setCustom(true);
+    };
+    const handleDetailsStratergy = (event) => {
+        //fetch from database update dataVal {}
+        
+        event.preventDefault();
+        const fieldName = event.target.getAttribute('name');
+        const fieldValue = event.target.value;
+        const newFormData = { ...addDetails };
+        newFormData[fieldName] = fieldValue;
+
+        setAddDetails(newFormData);
+        if(fieldValue==='custom')
+            setCustom(false);
+        else 
+            setCustom(true);
+        
+    };
+    const handleDetailsSegment = (event) => {
+        event.preventDefault();
+        const fieldName = event.target.getAttribute('name');
+        const fieldValue = event.target.value;
+        const newFormData = { ...addDetails };
+        newFormData[fieldName] = fieldValue;
+
+        setAddDetails(newFormData);
+        if(fieldValue==='Future')
+            setStrikeAndType(true);
+        else 
+            setStrikeAndType(false);
+        
+    };
+    const handleDetailsCustom = (event) => {
         event.preventDefault();
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.value;
@@ -61,12 +106,12 @@ export const Home = () => {
             exchange: addDetails.exchange,
             ticker: addDetails.ticker,
             strategy:addDetails.strategy,
-            segment: addDetails.segment,
+            segment: addDetails.strategy!='custom'?'Db segment':addDetails.segment,
             expiry: addDetails.expiry,
-            side: addDetails.side,
-            quantity: addDetails.quantity,
-            strike: addDetails.strike,
-            type: addDetails.strike
+            side: addDetails.strategy!='custom'?'Db side':addDetails.side,
+            quantity: addDetails.strategy!='custom'?'Db side':addDetails.quantity,
+            strike:addDetails.segment==='Future'?'':addDetails.strike,
+            type: addDetails.segment==='Future'?'':addDetails.type
         };
         const newDetails = [...details, newDetail];
         setDetails(newDetails);
@@ -116,8 +161,7 @@ export const Home = () => {
                                     name="exchange"
                                     id="exchange"
                                     className='products'
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}
+                                    onChange={handleDetailsNonCustom}
                                 >
                                     {
                                         exchangeData.map((data) => {
@@ -132,8 +176,7 @@ export const Home = () => {
                                     name="ticker"
                                     id="ticker"
                                     className='products'
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}
+                                    onChange={handleDetailsNonCustom}
                                 >
 
                                     {
@@ -147,10 +190,10 @@ export const Home = () => {
                                 <input
                                     type="date"
                                     min={disablePastDate()}
+                                    required
                                     name="expiry"
                                     className='products'
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}
+                                    onChange={handleDetailsNonCustom}
                                 />
                             </div>
                             <div className='select-products'>
@@ -160,8 +203,7 @@ export const Home = () => {
                                     name="strategy"
                                     id="strategy"
                                     className='products'
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}
+                                    onChange={handleDetailsStratergy}
                                 >
                                     {
                                         strategyData.map((data) => {
@@ -183,8 +225,7 @@ export const Home = () => {
 
 
                         </div>
-                        <button type='button' className='next-button'>Next</button>
-                        <div className="main-select-products" id='strat'>
+                        <div className={`main-select-products ${custom===true? 'customDiv':''}`} >
                             <div className='select-products'>
                                 <p className='sub-heading-1st' >Segment</p>
 
@@ -192,8 +233,7 @@ export const Home = () => {
                                     name="segment"
                                     id="segment"
                                     className='products'
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}>
+                                    onChange={handleDetailsSegment}>
                                     {
                                         segmentData.map((data) => {
                                             return <option value={data.name}>{data.name}</option>
@@ -209,8 +249,7 @@ export const Home = () => {
                                     name="side"
                                     id="side"
                                     className='products'
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}>
+                                    onChange={handleDetailsCustom}>
                                     {
                                         sideData.map((data) => {
                                             return <option value={data.name}>{data.name}</option>
@@ -227,11 +266,13 @@ export const Home = () => {
                                     className='products'
                                     type="number"
                                     min={0}
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}>
+                                    value={addDetails.quantity}
+                                    onChange={handleDetailsCustom}
+                                    >
                                 </input>
                             </div>
-                            <div className='select-products'>
+                            <div className={`select-products ${strikeAndType===true? 'customDiv':''}`}>
+                            {/* <div className='select-products customDiv'> */}
                                 <p className='sub-heading-1st' >Strike</p>
 
                                 <input
@@ -240,20 +281,20 @@ export const Home = () => {
                                     className='products'
                                     type="number"
                                     min={0}
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}>
+                                    value={addDetails.strike}
+                                    onChange={handleDetailsCustom}
+                                    >
                                 </input>
                             </div>
                         </div>
-                        <div className="main-select-products">
-                            <div className='select-products'>
+                        <div className={`main-select-products ${custom===true ? 'customDiv':''} `}>
+                            <div className={`select-products ${strikeAndType===true? 'customDiv':''}`}>
                                 <p className='sub-heading-1st' >Type</p>
                                 <select
                                     name="type"
                                     id="type"
                                     className='products'
-                                    onChange={handleDetails}
-                                    onLoad={handleDetails}>
+                                    onChange={handleDetailsCustom}>
                                         {
                                         typeData.map((data) => {
                                             return <option value={data.name}>{data.name}</option>
