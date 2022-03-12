@@ -1,0 +1,18 @@
+.main{
+    background-color: #0c555e;
+    padding: 3em
+}
+.text-head{
+    width: 80%;
+    height: fit-content;
+    color: white;
+    font-size: 2em;
+    font-weight: bolder;
+    
+}
+.text-details{
+    background-color: pink;
+    height: fit-content;
+    text-decoration: line-through;
+    font-style: sans-sarif;
+}

@@ -166,8 +166,8 @@ export const Home = () => {
                 <div className='navbar-open'>
                     <i class="fa-solid fa-xmark fa-2x" onClick={closeNavbar}></i>
                     <a className="side-nav-link" href='/'>Read about Popular Strategies</a>
-                    <a className="side-nav-link" href='/'>View Saved Strategies</a>
-                    <a className="side-nav-link" href='/'>Logout</a>
+                    <a className="side-nav-link" href='/ReadPStrategy'>View Saved Strategies</a>
+                    <a className="side-nav-link" href='/login'>Logout</a>
                 </div>
             </div>
 

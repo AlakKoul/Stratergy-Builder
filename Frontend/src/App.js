@@ -4,6 +4,7 @@ import { Navbar } from './components/Navbar';
 import { SignUp } from './components/SignUp';
 import { Login } from './components/Login';
 import { Home } from "./components/Home";
+import { ReadPStrategy } from "./components/ReadPStrategy";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
     <Router>
     <Navbar/>
     <Switch>
-    <Route exact path="/">
+      <Route exact path="/">
       <SignUp/>
       </Route>
       <Route exact path="/login">
@@ -19,6 +20,9 @@ function App() {
       </Route>
       <Route exact path="/home">
         <Home/>
+      </Route>
+      <Route exact path="/ReadPStrategy">
+        <ReadPStrategy/>
       </Route>
     </Switch>
     </Router>
