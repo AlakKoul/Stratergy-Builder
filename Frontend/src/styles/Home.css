@@ -121,3 +121,13 @@
 .customDiv{
     display: none;
 }
+.radio-btn{
+    display: flex;
+    justify-content: flex-start;
+}
+.radio-btn>:nth-child(1){
+    margin-right:5%;
+}
+.radio-btn>div{
+    margin-top:15%;
+}

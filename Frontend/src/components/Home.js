@@ -4,13 +4,20 @@ import { nanoid } from 'nanoid'
 import data from "./mock-data.json"
 import exchangeData from "./exchange.json"
 import tickerData from "./ticker.json"
-import strategyData from "./strategies.json"
 import segmentData from "./segment.json"
 import typeData from "./type.json"
 import sideData from "./side.json"
-
+import popularStrategies from "./popularStrategies.json"
+import customStrategies from "./customStrategies.json"
 
 export const Home = () => {
+    const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
+    const isRadioSelected=(value)=>{
+        return selectedRadioBtn===value;
+    }
+    const handleRadioClick = (event)=>{
+        setSelectedRadioBtn(event.target.value);
+    }
     //const dataVal = {type:'',}
     useEffect(() => {
         let exchangeVal = document.querySelector('#exchange').value;
@@ -19,28 +26,31 @@ export const Home = () => {
         let typeVal = document.querySelector('#type').value;
         let sideVal = document.querySelector('#side').value;
         let strategyVal = document.querySelector('#strategy').value;
-     const newDetail = {
-        exchange: exchangeVal,
-        ticker: tickerVal,
-        strategy:strategyVal,
-        segment: segmentVal,
-        expiry: '',
-        side: sideVal,
-        quantity:'',
-        strike: '',
-        type: segmentVal!='custom'?'Db segment':typeVal
-        //dataVal update
-    };
-    setAddDetails(newDetail);
-    if(segmentVal ==='Future') setStrikeAndType(true);
+        const newDetail = {
+            exchange: exchangeVal,
+            ticker: tickerVal,
+            strategy: strategyVal,
+            segment: segmentVal,
+            expiry: '',
+            side: sideVal,
+            quantity: '',
+            strike: '',
+            type: segmentVal != 'custom' ? 'Db segment' : typeVal
+            //dataVal update
+        };
+        setAddDetails(newDetail);
+        if (segmentVal === 'Future') setStrikeAndType(true);
+
     }, [])
-    
-    
+
+
+
+
     const [details, setDetails] = useState(data);
     const [addDetails, setAddDetails] = useState({
         exchange: '',
         ticker: '',
-        strategy:'',
+        strategy: '',
         segment: '',
         expiry: '',
         side: '',
@@ -48,8 +58,8 @@ export const Home = () => {
         strike: '',
         type: ''
     });
-    const [custom,setCustom] = useState(true);
-    const [strikeAndType,setStrikeAndType] = useState(false);
+    const [custom, setCustom] = useState(true);
+    const [strikeAndType, setStrikeAndType] = useState(false);
 
     const handleDetailsNonCustom = (event) => {
         let strategyID = document.querySelector('#strategy');
@@ -60,14 +70,14 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if(strategyID.value==='custom')
+        if (strategyID.value === 'custom')
             setCustom(false);
-        else 
+        else
             setCustom(true);
     };
     const handleDetailsStratergy = (event) => {
         //fetch from database update dataVal {}
-        
+
         event.preventDefault();
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.value;
@@ -75,11 +85,11 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if(fieldValue==='custom')
+        if (fieldValue === 'custom')
             setCustom(false);
-        else 
+        else
             setCustom(true);
-        
+
     };
     const handleDetailsSegment = (event) => {
         event.preventDefault();
@@ -89,18 +99,18 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if(fieldValue==='Future')
+        if (fieldValue === 'Future')
             setStrikeAndType(true);
-        else 
+        else
             setStrikeAndType(false);
-        
+
     };
     const handleDetailsCustom = (event) => {
         event.preventDefault();
         let quantityID = document.querySelector('#quantity');
-        if(quantityID.value>9999999) quantityID.value = 9999999;
+        if (quantityID.value > 9999999) quantityID.value = 9999999;
         let strikeID = document.querySelector('#strike');
-        if(strikeID.value>10000) strikeID.value = 10000;
+        if (strikeID.value > 10000) strikeID.value = 10000;
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.value;
         const newFormData = { ...addDetails };
@@ -111,17 +121,18 @@ export const Home = () => {
     };
     const handleDetailsAdd = (event) => {
         event.preventDefault();
+
         const newDetail = {
             id: nanoid(),
             exchange: addDetails.exchange,
             ticker: addDetails.ticker,
-            strategy:addDetails.strategy,
-            segment: addDetails.strategy!='custom'?'Db segment':addDetails.segment,
+            strategy: addDetails.strategy,
+            segment: addDetails.strategy != 'custom' ? 'Db segment' : addDetails.segment,
             expiry: addDetails.expiry,
-            side: addDetails.strategy!='custom'?'Db side':addDetails.side,
-            quantity: addDetails.strategy!='custom'?'Db side':addDetails.quantity,
-            strike:addDetails.segment==='Future'?'':addDetails.strike,
-            type: addDetails.segment==='Future'?'':addDetails.type
+            side: addDetails.strategy != 'custom' ? 'Db side' : addDetails.side,
+            quantity: addDetails.strategy != 'custom' ? 'Db side' : addDetails.quantity,
+            strike: addDetails.segment === 'Future' ? '' : addDetails.strike,
+            type: addDetails.segment === 'Future' ? '' : addDetails.type
         };
         const newDetails = [...details, newDetail];
         setDetails(newDetails);
@@ -207,19 +218,29 @@ export const Home = () => {
                                 />
                             </div>
                             <div className='select-products'>
-                                <p className='sub-heading-1st'>Strategy</p>
+                                <p className='sub-heading-1st'>Type of Strategy</p>
+                                <div className='radio-btn'>
+                                    <div>
 
-                                <select
-                                    name="strategy"
-                                    id="strategy"
-                                    className='products'
-                                    onChange={handleDetailsStratergy}
-                                >
-                                    {
-                                        strategyData.map((data) => {
-                                            return <option value={data.name}>{data.name}</option>
-                                        })
-                                    }</select>
+                                        <input type="radio" id="popular-radio" 
+                                        className='option-strategy' 
+                                        name="select-stratergy" 
+                                        value="popular" 
+                                        checked={isRadioSelected('popular')} 
+                                        onChange={handleRadioClick} />
+                                        <label for="popular-radio" selected>Popular</label>
+                                    </div>
+                                    <div>
+
+                                        <input type="radio" id="custom-radio" 
+                                        className='option-strategy' 
+                                        name="select-stratergy" 
+                                        value="custom"
+                                        checked={isRadioSelected('custom')}
+                                        onChange={handleRadioClick} />
+                                        <label for="custom-radio">Custom</label>
+                                    </div>
+                                </div>
                             </div>
 
                             {/* 
@@ -233,9 +254,33 @@ export const Home = () => {
 
 */}
 
-
                         </div>
-                        <div className={`main-select-products ${custom===true? 'customDiv':''}`} >
+                        <div className='main-select-products'>
+                            <div className='select-products'>
+                                <p className='sub-heading-1st'>Strategy</p>
+
+                                <select
+                                    name="strategy"
+                                    id="strategy"
+                                    className='products'
+                                    onChange={handleDetailsStratergy}
+                                >
+                                    {selectedRadioBtn == 'popular' ?
+                                        popularStrategies.map((data) => {
+                                            return <option value={data.name}>{data.name}</option>
+                                        }) :
+                                        customStrategies.map((data) => {
+                                            return <option value={data.name}>{data.name}</option>
+                                        })
+
+                                    }</select>
+                            </div>
+                            <div className='select-products'></div>
+                            <div className='select-products'></div>
+                            <div className='select-products'></div>
+                        </div>
+
+                        <div className={`main-select-products ${custom === true ? 'customDiv' : ''}`} >
                             <div className='select-products'>
                                 <p className='sub-heading-1st' >Segment</p>
 
@@ -279,11 +324,11 @@ export const Home = () => {
                                     max={9999999}
                                     value={addDetails.quantity}
                                     onChange={handleDetailsCustom}
-                                    >
+                                >
                                 </input>
                             </div>
-                            <div className={`select-products ${strikeAndType===true? 'customDiv':''}`}>
-                            {/* <div className='select-products customDiv'> */}
+                            <div className={`select-products ${strikeAndType === true ? 'customDiv' : ''}`}>
+                                {/* <div className='select-products customDiv'> */}
                                 <p className='sub-heading-1st' >Strike</p>
 
                                 <input
@@ -295,19 +340,19 @@ export const Home = () => {
                                     max={10000}
                                     value={addDetails.strike}
                                     onChange={handleDetailsCustom}
-                                    >
+                                >
                                 </input>
                             </div>
                         </div>
-                        <div className={`main-select-products ${custom===true ? 'customDiv':''} `}>
-                            <div className={`select-products ${strikeAndType===true? 'customDiv':''}`}>
+                        <div className={`main-select-products ${custom === true ? 'customDiv' : ''} `}>
+                            <div className={`select-products ${strikeAndType === true ? 'customDiv' : ''}`}>
                                 <p className='sub-heading-1st' >Type</p>
                                 <select
                                     name="type"
                                     id="type"
                                     className='products'
                                     onChange={handleDetailsCustom}>
-                                        {
+                                    {
                                         typeData.map((data) => {
                                             return <option value={data.name}>{data.name}</option>
                                         })
@@ -337,6 +382,7 @@ export const Home = () => {
                                 </tr>
                             </thead>
                             <tbody>
+
                                 {details.map((detail) => (
                                     <tr>
                                         <td>{detail.exchange}</td>
