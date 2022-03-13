@@ -30,7 +30,7 @@ export const ReadPStrategy = () => {
                 </div>
             </div>
             <div className='mainn'>
-                <div className='text-head'>
+                <div className='bookmark'>
                     Married Put
                 </div>
                 <div className='text-details'>
