@@ -29,7 +29,7 @@ export const ReadPStrategy = () => {
                     <a className="side-nav-link" href='/login'>Logout</a>
                 </div>
             </div>
-            <div className='main'>
+            <div className='mainn'>
                 <div className='text-head'>
                     Married Put
                 </div>
