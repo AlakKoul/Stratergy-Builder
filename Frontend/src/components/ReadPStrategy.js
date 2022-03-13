@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import '../styles/ReadPStrategy.css'
-
+import read from './read.json';
+import ReadComponent from './ReadComponent';
 export const ReadPStrategy = () => {
 
     const openNavbar = () => {
@@ -30,15 +31,15 @@ export const ReadPStrategy = () => {
                 </div>
             </div>
             <div className='mainn'>
-                <div className='bookmark'>
-                    Married Put
-                </div>
-                <div className='text-details'>
-                    This is detail of our first strategy
-                </div>
+                {
+                    read.map((data)=>{
+                    return <ReadComponent name={data.name} description={data.description}/> 
+                    })
+                }
+                
             </div>
         </>
     )
 }
-
+export default ReadPStrategy;
 

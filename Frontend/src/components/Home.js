@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/Home.css'
 import { nanoid } from 'nanoid'
-import data from "./mock-data.json"
 import exchangeData from "./exchange.json"
 import tickerData from "./ticker.json"
 import segmentData from "./segment.json"
@@ -9,6 +8,7 @@ import typeData from "./type.json"
 import sideData from "./side.json"
 import popularStrategies from "./popularStrategies.json"
 import detailPopularStrategies from "./detailPopularStratergies.json"
+import detailCustomStrategies from "./detailCustomStrategies.json"
 import customStrategies from "./customStrategies.json"
 import {Link} from "react-router-dom"
 
@@ -18,6 +18,8 @@ export const Home = () => {
         return selectedRadioBtn===value;
     }
     const handleRadioClick = (event)=>{
+        setDetails([]);
+        showTable(true);
         setSelectedRadioBtn(event.target.value);
     }
     //const dataVal = {type:'',}
@@ -48,8 +50,7 @@ export const Home = () => {
 
 
 
-    const [details, setDetails] = useState(data);
-    const [addPopularStrategy, setAddPopularStrategy] = useState([]);
+    const [details, setDetails] = useState([]);
     const [addDetails, setAddDetails] = useState({
         exchange: '',
         ticker: '',
@@ -62,9 +63,12 @@ export const Home = () => {
         type: ''
     });
     const [custom, setCustom] = useState(true);
+    const [table, showTable] = useState(true);
     const [strikeAndType, setStrikeAndType] = useState(false);
 
     const handleDetailsNonCustom = (event) => {
+        setDetails([]);
+        showTable(true);
         let strategyID = document.querySelector('#strategy');
         event.preventDefault();
         const fieldName = event.target.getAttribute('name');
@@ -79,11 +83,16 @@ export const Home = () => {
             setCustom(true);
     };
     const handleDetailsStratergy = (event) => {
+        
+        const fieldName = event.target.getAttribute('name');
+        const fieldValue = event.target.value;
+        if(fieldValue!=='custom'){
+            showTable(true);
+            setDetails([]);
+        }
         //fetch from database update dataVal {}
 
         event.preventDefault();
-        const fieldName = event.target.getAttribute('name');
-        const fieldValue = event.target.value;
         const newFormData = { ...addDetails };
         newFormData[fieldName] = fieldValue;
 
@@ -122,23 +131,20 @@ export const Home = () => {
         setAddDetails(newFormData);
 
     };
-
-    const handleDetailsAdd = (event) => {
-        event.preventDefault();
-        if(selectedRadioBtn==='popular'){
-            let pId = -1;
-            let strategyID = document.querySelector('#strategy');
-            for(let pS in popularStrategies){
-                if(popularStrategies[pS].name===strategyID.value){
-                    pId = popularStrategies[pS].id;
+    const fetchData = (type,jsonFile,detailJson)=>{
+        let pId = -1;
+            let strategyID = document.querySelector('#'+type);
+            for(let pS in jsonFile){
+                if(jsonFile[pS].name===strategyID.value){
+                    pId = jsonFile[pS].id;
                     break;
                 }
             }
             // console.log(pId);
             let tempObj;
-            for(let i in detailPopularStrategies){
-                if(detailPopularStrategies[i].id===pId){
-                    tempObj = {...detailPopularStrategies[i]}
+            for(let i in detailJson){
+                if(detailJson[i].id===pId){
+                    tempObj = {...detailJson[i]}
                     break;
                 }
             }
@@ -166,6 +172,17 @@ export const Home = () => {
             // console.log(detailsArr);
             setDetails(detailsArr);
             
+    }
+    const handleDetailsAdd = (event) => {
+        event.preventDefault();
+        showTable(false);
+        const table = document.querySelector('.dtable');
+        table.style.display='block';
+        if(selectedRadioBtn==='popular'){
+            fetchData("strategy",popularStrategies,detailPopularStrategies);
+        }
+        else if(selectedRadioBtn==='custom' && addDetails.strategy !== 'custom'){
+            fetchData("strategy",customStrategies,detailCustomStrategies);
         }
         else{
         const newDetail = {
@@ -413,8 +430,8 @@ export const Home = () => {
                         <button type='submit' className='next-button'>Add</button>
 
                     </form>
-                    <div className='dtable'>
-                        <table className='strategy-table'>
+                    <div className='dtable' >
+                        <table className={`strategy-table ${table==true? 'customDiv':""}`}>
                             <thead>
                                 <tr>
                                     <th>Exchange</th>

@@ -1,5 +1,5 @@
 .mainn{
-    margin: 8% 10% 3% 18%;
+    margin: 5% 10% 3% 18%;
     width:70vw;
     background-color: whitesmoke;
     border-radius:0em 1em 1em 0em;
@@ -45,4 +45,7 @@
     border-left: 0.62em solid #009879;
     border-top: 0.61em solid transparent;
     border-bottom: 0.61em solid transparent;
+  }
+  .readComp{
+    margin:10% 0%;
   }

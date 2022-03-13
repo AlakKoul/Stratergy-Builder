@@ -3,6 +3,7 @@ nav{
     top:0%;
     background-color: #658f9aaf;
     padding:0.6em;
+    z-index: 1;
 }
 .logo{
     color:#b36f4c;
