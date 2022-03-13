@@ -21,7 +21,7 @@ function App() {
       <Route exact path="/home">
         <Home/>
       </Route>
-      <Route exact path="/ReadPStrategy">
+      <Route exact path="/read-p-strategy">
         <ReadPStrategy/>
       </Route>
     </Switch>

@@ -8,7 +8,9 @@ import segmentData from "./segment.json"
 import typeData from "./type.json"
 import sideData from "./side.json"
 import popularStrategies from "./popularStrategies.json"
+import detailPopularStrategies from "./detailPopularStratergies.json"
 import customStrategies from "./customStrategies.json"
+import {Link} from "react-router-dom"
 
 export const Home = () => {
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
@@ -47,6 +49,7 @@ export const Home = () => {
 
 
     const [details, setDetails] = useState(data);
+    const [addPopularStrategy, setAddPopularStrategy] = useState([]);
     const [addDetails, setAddDetails] = useState({
         exchange: '',
         ticker: '',
@@ -119,9 +122,52 @@ export const Home = () => {
         setAddDetails(newFormData);
 
     };
+
     const handleDetailsAdd = (event) => {
         event.preventDefault();
-
+        if(selectedRadioBtn==='popular'){
+            let pId = -1;
+            let strategyID = document.querySelector('#strategy');
+            for(let pS in popularStrategies){
+                if(popularStrategies[pS].name===strategyID.value){
+                    pId = popularStrategies[pS].id;
+                    break;
+                }
+            }
+            // console.log(pId);
+            let tempObj;
+            for(let i in detailPopularStrategies){
+                if(detailPopularStrategies[i].id===pId){
+                    tempObj = {...detailPopularStrategies[i]}
+                    break;
+                }
+            }
+            // console.log(tempObj);
+            // let noOfEnteries = tempObj.instruments.length;
+            // console.log(noOfEnteries);
+            let exchangeVal = addDetails.exchange;
+            let tickerVal = addDetails.ticker;
+            let strategyVal = addDetails.strategy;
+            let expiryVal = addDetails.expiry;
+            let objCommon = {
+                "exchange": exchangeVal,
+                "ticker": tickerVal,
+                "strategy": strategyVal,
+                "expiry": expiryVal
+            }
+            // console.log(objCommon)
+            // let objMerge = {...objCommon,...tempObj.instruments[0]}
+            let detailsArr=[];
+            for(let i in tempObj.instruments){
+                console.log("krishna")
+                let objMerge = {...objCommon,...tempObj.instruments[i]}
+                detailsArr.push(objMerge);
+            }
+            // console.log(detailsArr);
+            setDetails(detailsArr);
+            
+        }
+        else{
         const newDetail = {
             id: nanoid(),
             exchange: addDetails.exchange,
@@ -136,6 +182,7 @@ export const Home = () => {
         };
         const newDetails = [...details, newDetail];
         setDetails(newDetails);
+    }
     }
     const openNavbar = () => {
         const navClose = document.querySelector('.navbar-close');
@@ -165,9 +212,9 @@ export const Home = () => {
                 </div>
                 <div className='navbar-open'>
                     <i class="fa-solid fa-xmark fa-2x" onClick={closeNavbar}></i>
-                    <a className="side-nav-link" href='/'>Read about Popular Strategies</a>
-                    <a className="side-nav-link" href='/ReadPStrategy'>View Saved Strategies</a>
-                    <a className="side-nav-link" href='/login'>Logout</a>
+                    <Link className="side-nav-link" to='/read-p-strategy'>Read about Popular Strategies</Link>
+                    <Link className="side-nav-link" to='/'>View Saved Strategies</Link>
+                    <Link className="side-nav-link" to='/login'>Logout</Link>
                 </div>
             </div>
 
