@@ -47,9 +47,6 @@ export const Home = () => {
 
     }, [])
 
-
-
-
     const [details, setDetails] = useState([]);
     const [addDetails, setAddDetails] = useState({
         exchange: '',
@@ -201,6 +198,37 @@ export const Home = () => {
         setDetails(newDetails);
     }
     }
+
+    const save = ()=>{
+        if(selectedRadioBtn==='custom' && addDetails.strategy === 'custom'){
+            let stName = prompt("Please enter name of strategy", "Anonymous");
+            let stDesc = prompt("Please enter description of strategy", "Anonymous");
+            let id = detailCustomStrategies.length+1;
+            let instruments = [];
+            for(let i in details){
+                let instObj={
+                "segment":details[i].segment,
+                "side":details[i].side,
+                "quantity":details[i].quantity,
+                "strike":details[i].strike,
+                "type":details[i].type
+                }
+                instruments.push(instObj);
+            }
+            let newCustomStrategy={
+                "id":id,
+                "name":stName,
+                "description":stDesc,
+                "expiry":details[0].expiry,
+                "exchange":details[0].exchange,
+                "ticker":details[0].ticker,
+                "instruments":instruments
+            }
+            detailCustomStrategies.push(newCustomStrategy);
+            console.log(detailCustomStrategies);
+        }
+    }
+
     const openNavbar = () => {
         const navClose = document.querySelector('.navbar-close');
         const navOpen = document.querySelector('.navbar-open');
@@ -314,9 +342,7 @@ export const Home = () => {
                                 for(let i in strategy){
                                     options.add(strategy[i].name);
                                 }
-
-
-*/}
+                            */}
 
                         </div>
                         <div className='main-select-products'>
@@ -462,7 +488,7 @@ export const Home = () => {
                                 ))}
                             </tbody>
                         </table>
-
+                        <button type='submit' className={`save-skeleton ${table==true? 'customDiv':""} `} onClick={save}>Save</button>
                     </div>
                 </div>
             </div>
