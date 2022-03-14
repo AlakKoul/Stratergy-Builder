@@ -10,14 +10,14 @@ import popularStrategies from "./popularStrategies.json"
 import detailPopularStrategies from "./detailPopularStratergies.json"
 import detailCustomStrategies from "./detailCustomStrategies.json"
 import customStrategies from "./customStrategies.json"
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 export const Home = () => {
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
-    const isRadioSelected=(value)=>{
-        return selectedRadioBtn===value;
+    const isRadioSelected = (value) => {
+        return selectedRadioBtn === value;
     }
-    const handleRadioClick = (event)=>{
+    const handleRadioClick = (event) => {
         setDetails([]);
         showTable(true);
         setSelectedRadioBtn(event.target.value);
@@ -80,10 +80,10 @@ export const Home = () => {
             setCustom(true);
     };
     const handleDetailsStratergy = (event) => {
-        
+
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.value;
-        if(fieldValue!=='custom'){
+        if (fieldValue !== 'custom') {
             showTable(true);
             setDetails([]);
         }
@@ -128,104 +128,102 @@ export const Home = () => {
         setAddDetails(newFormData);
 
     };
-    const fetchData = (type,jsonFile,detailJson)=>{
+    const fetchData = (type, jsonFile, detailJson) => {
         let pId = -1;
-            let strategyID = document.querySelector('#'+type);
-            for(let pS in jsonFile){
-                if(jsonFile[pS].name===strategyID.value){
-                    pId = jsonFile[pS].id;
-                    break;
-                }
+        let strategyID = document.querySelector('#' + type);
+        for (let pS in jsonFile) {
+            if (jsonFile[pS].name === strategyID.value) {
+                pId = jsonFile[pS].id;
+                break;
             }
-            // console.log(pId);
-            let tempObj;
-            for(let i in detailJson){
-                if(detailJson[i].id===pId){
-                    tempObj = {...detailJson[i]}
-                    break;
-                }
+        }
+        // console.log(pId);
+        let tempObj;
+        for (let i in detailJson) {
+            if (detailJson[i].id === pId) {
+                tempObj = { ...detailJson[i] }
+                break;
             }
-            // console.log(tempObj);
-            // let noOfEnteries = tempObj.instruments.length;
-            // console.log(noOfEnteries);
-            let exchangeVal = addDetails.exchange;
-            let tickerVal = addDetails.ticker;
-            let strategyVal = addDetails.strategy;
-            let expiryVal = addDetails.expiry;
-            let objCommon = {
-                "exchange": exchangeVal,
-                "ticker": tickerVal,
-                "strategy": strategyVal,
-                "expiry": expiryVal
-            }
-            // console.log(objCommon)
-            // let objMerge = {...objCommon,...tempObj.instruments[0]}
-            let detailsArr=[];
-            for(let i in tempObj.instruments){
-                console.log("krishna")
-                let objMerge = {...objCommon,...tempObj.instruments[i]}
-                detailsArr.push(objMerge);
-            }
-            // console.log(detailsArr);
-            setDetails(detailsArr);
-            
+        }
+        // console.log(tempObj);
+        // let noOfEnteries = tempObj.instruments.length;
+        // console.log(noOfEnteries);
+        let exchangeVal = addDetails.exchange;
+        let tickerVal = addDetails.ticker;
+        let strategyVal = addDetails.strategy;
+        let expiryVal = addDetails.expiry;
+        let objCommon = {
+            "exchange": exchangeVal,
+            "ticker": tickerVal,
+            "strategy": strategyVal,
+            "expiry": expiryVal
+        }
+        // console.log(objCommon)
+        // let objMerge = {...objCommon,...tempObj.instruments[0]}
+        let detailsArr = [];
+        for (let i in tempObj.instruments) {
+            console.log("krishna")
+            let objMerge = { ...objCommon, ...tempObj.instruments[i] }
+            detailsArr.push(objMerge);
+        }
+        // console.log(detailsArr);
+        setDetails(detailsArr);
+
     }
     const handleDetailsAdd = (event) => {
         event.preventDefault();
         showTable(false);
         const table = document.querySelector('.dtable');
-        table.style.display='block';
-        if(selectedRadioBtn==='popular'){
-            fetchData("strategy",popularStrategies,detailPopularStrategies);
+        table.style.display = 'block';
+        if (selectedRadioBtn === 'popular') {
+            fetchData("strategy", popularStrategies, detailPopularStrategies);
         }
-        else if(selectedRadioBtn==='custom' && addDetails.strategy !== 'custom'){
-            fetchData("strategy",customStrategies,detailCustomStrategies);
+        else if (selectedRadioBtn === 'custom' && addDetails.strategy !== 'custom') {
+            fetchData("strategy", customStrategies, detailCustomStrategies);
         }
-        else{
-        const newDetail = {
-            id: nanoid(),
-            exchange: addDetails.exchange,
-            ticker: addDetails.ticker,
-            strategy: addDetails.strategy,
-            segment: addDetails.strategy != 'custom' ? 'Db segment' : addDetails.segment,
-            expiry: addDetails.expiry,
-            side: addDetails.strategy != 'custom' ? 'Db side' : addDetails.side,
-            quantity: addDetails.strategy != 'custom' ? 'Db side' : addDetails.quantity,
-            strike: addDetails.segment === 'Future' ? '' : addDetails.strike,
-            type: addDetails.segment === 'Future' ? '' : addDetails.type
-        };
-        const newDetails = [...details, newDetail];
-        setDetails(newDetails);
-    }
+        else {
+            const newDetail = {
+                id: nanoid(),
+                exchange: addDetails.exchange,
+                ticker: addDetails.ticker,
+                strategy: addDetails.strategy,
+                segment: addDetails.strategy != 'custom' ? 'Db segment' : addDetails.segment,
+                expiry: addDetails.expiry,
+                side: addDetails.strategy != 'custom' ? 'Db side' : addDetails.side,
+                quantity: addDetails.strategy != 'custom' ? 'Db side' : addDetails.quantity,
+                strike: addDetails.segment === 'Future' ? '' : addDetails.strike,
+                type: addDetails.segment === 'Future' ? '' : addDetails.type
+            };
+            const newDetails = [...details, newDetail];
+            setDetails(newDetails);
+        }
     }
 
-    const save = ()=>{
-        if(selectedRadioBtn==='custom' && addDetails.strategy === 'custom'){
-            let stName = prompt("Please enter name of strategy", "Anonymous");
-            let stDesc = prompt("Please enter description of strategy", "Anonymous");
-            let id = detailCustomStrategies.length+1;
+    const save = () => {
+        if (selectedRadioBtn === 'custom' && addDetails.strategy === 'custom') {
+            toggleModal();
+            let id = detailCustomStrategies.length + 1;
             let instruments = [];
-            for(let i in details){
-                let instObj={
-                "segment":details[i].segment,
-                "side":details[i].side,
-                "quantity":details[i].quantity,
-                "strike":details[i].strike,
-                "type":details[i].type
+            for (let i in details) {
+                let instObj = {
+                    "segment": details[i].segment,
+                    "side": details[i].side,
+                    "quantity": details[i].quantity,
+                    "strike": details[i].strike,
+                    "type": details[i].type
                 }
                 instruments.push(instObj);
             }
-            let newCustomStrategy={
-                "id":id,
-                "name":stName,
-                "description":stDesc,
-                "expiry":details[0].expiry,
-                "exchange":details[0].exchange,
-                "ticker":details[0].ticker,
-                "instruments":instruments
+            let newCustomStrategy = {
+                "id": id,
+                "name": "",
+                "description": "",
+                "expiry": details[0].expiry,
+                "exchange": details[0].exchange,
+                "ticker": details[0].ticker,
+                "instruments": instruments
             }
             detailCustomStrategies.push(newCustomStrategy);
-            console.log(detailCustomStrategies);
         }
     }
 
@@ -248,6 +246,26 @@ export const Home = () => {
         const yyyy = today.getFullYear();
         return yyyy + "-" + mm + "-" + dd;
     };
+    const [modal, setModal] = useState(false);
+    // const [nameDesc, setNameDesc]=useState({});
+    const toggleModal = () => {
+        setModal(!modal);
+    };
+
+    const saveModal = ()=>{
+        let stName =document.querySelector('.stName').value;
+        let stDesc =document.querySelector('.stDesc').value;
+        // let nD ={
+        //     "name":stName,
+        //     "description":stDesc
+        // }
+        // setNameDesc(nD);
+        toggleModal();
+        let l = detailCustomStrategies.length;
+        detailCustomStrategies[l-1].name = stName;
+        detailCustomStrategies[l-1].description = stDesc;
+        console.log(detailCustomStrategies);
+    }
     return (
         <>
 
@@ -314,22 +332,22 @@ export const Home = () => {
                                 <div className='radio-btn'>
                                     <div>
 
-                                        <input type="radio" id="popular-radio" 
-                                        className='option-strategy' 
-                                        name="select-stratergy" 
-                                        value="popular" 
-                                        checked={isRadioSelected('popular')} 
-                                        onChange={handleRadioClick} />
+                                        <input type="radio" id="popular-radio"
+                                            className='option-strategy'
+                                            name="select-stratergy"
+                                            value="popular"
+                                            checked={isRadioSelected('popular')}
+                                            onChange={handleRadioClick} />
                                         <label for="popular-radio" selected>Popular</label>
                                     </div>
                                     <div>
 
-                                        <input type="radio" id="custom-radio" 
-                                        className='option-strategy' 
-                                        name="select-stratergy" 
-                                        value="custom"
-                                        checked={isRadioSelected('custom')}
-                                        onChange={handleRadioClick} />
+                                        <input type="radio" id="custom-radio"
+                                            className='option-strategy'
+                                            name="select-stratergy"
+                                            value="custom"
+                                            checked={isRadioSelected('custom')}
+                                            onChange={handleRadioClick} />
                                         <label for="custom-radio">Custom</label>
                                     </div>
                                 </div>
@@ -457,7 +475,7 @@ export const Home = () => {
 
                     </form>
                     <div className='dtable' >
-                        <table className={`strategy-table ${table==true? 'customDiv':""}`}>
+                        <table className={`strategy-table ${table == true ? 'customDiv' : ""}`}>
                             <thead>
                                 <tr>
                                     <th>Exchange</th>
@@ -488,7 +506,21 @@ export const Home = () => {
                                 ))}
                             </tbody>
                         </table>
-                        <button type='submit' className={`save-skeleton ${table==true? 'customDiv':""} `} onClick={save}>Save</button>
+                        <button type='submit' className={`save-skeleton ${table == true ? 'customDiv' : ""} `} onClick={save}>Save</button>
+                        {modal && (
+                            <div className="modal">
+                                <div onClick={toggleModal} className="overlay"></div>
+                                <div className="modal-content">
+                                    <h2>Enter Details</h2>
+                                    <p><input type='text' placeholder='Enter Name' required className='stName'/></p>
+                                    <p><textarea className='stDesc' placeholder='Enter Description' required rows="4" cols="50"></textarea></p>
+                                    <button type='submit' className='save-popup' onClick={saveModal}>OK</button>
+                                    <button className="close-modal" onClick={toggleModal}>
+                                        CLOSE
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
