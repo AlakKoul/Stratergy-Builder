@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState , Fragment } from 'react'
 import '../styles/Home.css'
 import { nanoid } from 'nanoid'
 import exchangeData from "./exchange.json"
@@ -11,8 +11,13 @@ import detailPopularStrategies from "./detailPopularStratergies.json"
 import detailCustomStrategies from "./detailCustomStrategies.json"
 import customStrategies from "./customStrategies.json"
 import { Link } from "react-router-dom"
+import { ReadOnlyRow } from './ReadOnlyRow'
+import { Plot } from './Plot'
+// import { EditableRow } from './EditableRow'
+
 
 export const Home = () => {
+    
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
     const isRadioSelected = (value) => {
         return selectedRadioBtn === value;
@@ -225,6 +230,9 @@ export const Home = () => {
             }
             detailCustomStrategies.push(newCustomStrategy);
         }
+        else{
+
+        }
     }
 
     const openNavbar = () => {
@@ -265,7 +273,9 @@ export const Home = () => {
         detailCustomStrategies[l-1].name = stName;
         detailCustomStrategies[l-1].description = stDesc;
         console.log(detailCustomStrategies);
+
     }
+
     return (
         <>
 
@@ -492,21 +502,17 @@ export const Home = () => {
                             <tbody>
 
                                 {details.map((detail) => (
-                                    <tr>
-                                        <td>{detail.exchange}</td>
-                                        <td>{detail.ticker}</td>
-                                        <td>{detail.strategy}</td>
-                                        <td>{detail.segment}</td>
-                                        <td>{detail.expiry}</td>
-                                        <td>{detail.side}</td>
-                                        <td>{detail.quantity}</td>
-                                        <td>{detail.strike}</td>
-                                        <td>{detail.type}</td>
-                                    </tr>
+                                    <Fragment>
+                                        {/* <EditableRow detail={detail}/> */}
+                                        <ReadOnlyRow detail={detail}/>
+                                    </Fragment>
                                 ))}
                             </tbody>
                         </table>
                         <button type='submit' className={`save-skeleton ${table == true ? 'customDiv' : ""} `} onClick={save}>Save</button>
+
+                        <Plot/>
+
                         {modal && (
                             <div className="modal">
                                 <div onClick={toggleModal} className="overlay"></div>
