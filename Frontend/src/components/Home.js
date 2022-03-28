@@ -13,7 +13,7 @@ import customStrategies from "./customStrategies.json"
 import { Link } from "react-router-dom"
 import { ReadOnlyRow } from './ReadOnlyRow'
 import { Plot } from './Plot'
-// import { EditableRow } from './EditableRow'
+import { EditableRow } from './EditableRow'
 
 
 export const Home = () => {
@@ -175,6 +175,90 @@ export const Home = () => {
         setDetails(detailsArr);
 
     }
+    const [editDetailId, setEditDetailId] = useState(null);
+    const [editFormData, setEditFormData] = useState({
+        exchange: '',
+        ticker: '',
+        strategy: '',
+        segment: '',
+        expiry: '',
+        side: '',
+        quantity: '',
+        strike: '',
+        type: ''
+      });
+    const handleEditClick = (event, detail) => {
+        event.preventDefault();
+        setEditDetailId(detail.id);
+        console.log(detail.id);
+    
+        const formValues = {
+            exchange: detail.exchange,
+            ticker: detail.ticker,
+            strategy: detail.strategy,
+            segment: detail.segment,
+            expiry: detail.expiry,
+            side: detail.side,
+            quantity: detail.quantity,
+            strike: detail.strike,
+            type: detail.type
+        };
+    
+        setEditFormData(formValues);
+      };
+
+      const handleCancelClick = () => {
+        setEditDetailId(null);
+      };
+
+      const handleDeleteClick = (editDetailId) => {
+        const newDetails = [...details];
+    
+        const index = details.findIndex((detail) => detail.id === editDetailId);
+    
+        newDetails.splice(index, 1);
+    
+        setDetails(newDetails);
+      };
+
+      const handleEditFormChange = (event) => {
+        event.preventDefault();
+    
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+    
+        const newFormData = { ...editFormData };
+        newFormData[fieldName] = fieldValue;
+    
+        setEditFormData(newFormData);
+      };
+
+      const handleEditFormSubmit = (event) => {
+        event.preventDefault();
+    
+        const editedDetails = {
+            exchange: editFormData.exchange,
+            ticker: editFormData.ticker,
+            id: editDetailId,
+            strategy: editFormData.strategy,
+            segment: editFormData.segment,
+            expiry: editFormData.expiry,
+            side: editFormData.side,
+            quantity: editFormData.quantity,
+            strike: editFormData.strike,
+            type: editFormData.type
+        };
+    
+        const newDetails = [...details];
+    
+        const index = details.findIndex((detail) => detail.id === editDetailId);
+    
+        newDetails[index] = editedDetails;
+    
+        setDetails(newDetails);
+        setEditDetailId(null);
+      };
+
     const handleDetailsAdd = (event) => {
         event.preventDefault();
         showTable(false);
@@ -276,6 +360,8 @@ export const Home = () => {
 
     }
 
+    
+
     return (
         <>
 
@@ -363,14 +449,6 @@ export const Home = () => {
                                 </div>
                             </div>
 
-                            {/* 
-
-                                export strategy array from api
-
-                                for(let i in strategy){
-                                    options.add(strategy[i].name);
-                                }
-                            */}
 
                         </div>
                         <div className='main-select-products'>
@@ -484,7 +562,9 @@ export const Home = () => {
                         <button type='submit' className='next-button'>Add</button>
 
                     </form>
+
                     <div className='dtable' >
+                    <form onSubmit={handleEditFormSubmit}>
                         <table className={`strategy-table ${table == true ? 'customDiv' : ""}`}>
                             <thead>
                                 <tr>
@@ -497,18 +577,30 @@ export const Home = () => {
                                     <th>Quantity</th>
                                     <th>Strike</th>
                                     <th>Type</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                                 {details.map((detail) => (
                                     <Fragment>
-                                        {/* <EditableRow detail={detail}/> */}
-                                        <ReadOnlyRow detail={detail}/>
+                                        {editDetailId === detail.id ?
+                                (<EditableRow 
+                                    editFormData={editFormData}
+                            handleEditFormChange={handleEditFormChange}
+                                    handleCancelClick={handleCancelClick}
+                                />)
+                                    : (
+                                        <ReadOnlyRow detail={detail}
+                                        handleEditClick={handleEditClick}
+                                        handleDeleteClick={handleDeleteClick}/>
+                                    )
+                                        }
                                     </Fragment>
                                 ))}
                             </tbody>
                         </table>
+                        </form>
                         <button type='submit' className={`save-skeleton ${table == true ? 'customDiv' : ""} `} onClick={save}>Save</button>
 
                         <Plot/>

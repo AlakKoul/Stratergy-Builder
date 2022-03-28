@@ -1,21 +1,35 @@
 import React from 'react'
 
-export const EditableRow = ({detail}) => {
+export const EditableRow = ({editFormData, handleEditFormChange, handleCancelClick}) => {
   return (
       <tr>
-        <td>{detail.exchange}</td>
-            <td>{detail.ticker}</td>
-            <td>{detail.strategy}</td>
-            <td>{detail.segment}</td>
-            <td>{detail.expiry}</td>
-            <td>{detail.side}</td>
+        <td>{editFormData.exchange}</td>
+            <td>{editFormData.ticker}</td>
+            <td>{editFormData.strategy}</td>
+            <td>{editFormData.segment}</td>
+            <td>{editFormData.expiry}</td>
+            <td>{editFormData.side}</td>
             <td>
             <input type="number"
+            value = {editFormData.quantity}
+            onChange={handleEditFormChange}
             name="quantity"/>    
             </td>
             <td><input type="number"
+            value={editFormData.strike}
+            onChange={handleEditFormChange}
             name="strike"/>  </td>
-            <td>{detail.type}</td>
+            <td>{editFormData.type}</td>
+            <td>
+            <button
+          type="submit"
+        >
+          Save
+        </button>
+        <button type="button" onClick={handleCancelClick} >
+          Cancel
+        </button>
+            </td>
       </tr>
   )
 }

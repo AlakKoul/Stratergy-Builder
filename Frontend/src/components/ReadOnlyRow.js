@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const ReadOnlyRow = ({detail}) => {
+export const ReadOnlyRow = ({detail, handleEditClick, handleDeleteClick}) => {
     return (
         <tr>
             <td>{detail.exchange}</td>
@@ -12,6 +12,17 @@ export const ReadOnlyRow = ({detail}) => {
             <td>{detail.quantity}</td>
             <td>{detail.strike}</td>
             <td>{detail.type}</td>
+            <td>
+        <button
+          type="button"
+          onClick={(event) => handleEditClick(event, detail)}
+        >
+          Edit
+        </button>
+        <button type="button" onClick={() => handleDeleteClick(detail.id)} >
+          Delete
+        </button>
+      </td>
         </tr>
     )
 }
