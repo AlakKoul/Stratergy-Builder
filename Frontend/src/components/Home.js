@@ -6,10 +6,10 @@ import tickerData from "./ticker.json"
 import segmentData from "./segment.json"
 import typeData from "./type.json"
 import sideData from "./side.json"
-import popularStrategies from "./popularStrategies.json"
-import detailPopularStrategies from "./detailPopularStratergies.json"
-import detailCustomStrategies from "./detailCustomStrategies.json"
-import customStrategies from "./customStrategies.json"
+import popularStrategiesName from "./popularStrategies"
+import detailPopularStrategies from "./detailPopularStratergies"
+import detailStrategiesSkeletonFunction from "./detailCustomStrategies.js"
+import customStrategiesName from "./customStrategies"
 import { Link } from "react-router-dom"
 import { ReadOnlyRow } from './ReadOnlyRow'
 import { Plot } from './Plot'
@@ -19,10 +19,38 @@ import { EditableRow } from './EditableRow'
 export const Home = () => {
     
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
+    const [customStrategies,setcustomStrategies] = useState( [
+        {
+            "id" : "1",
+            "name" : "Blank"
+        }
+    ]);
+
+    const [popularStrategies,setpopularStrategies] = useState([
+        {
+        "id" : "1",
+        "name" : " "
+        }
+    ])
+  
     const isRadioSelected = (value) => {
         return selectedRadioBtn === value;
     }
-    const handleRadioClick = (event) => {
+    var detailCustomStrategies;
+    
+    
+    const handleRadioClick = async (event) => {
+        if(customStrategies.length==1){
+            var temp1 = customStrategies;
+            var temp = await customStrategiesName();
+            temp.push(temp1[0]);
+            setcustomStrategies(temp);
+        }
+
+        if(popularStrategies.length==1){
+            var temp = await popularStrategiesName();
+            setpopularStrategies(temp);
+        }
         setDetails([]);
         showTable(true);
         setSelectedRadioBtn(event.target.value);
@@ -133,7 +161,8 @@ export const Home = () => {
         setAddDetails(newFormData);
 
     };
-    const fetchData = (type, jsonFile, detailJson) => {
+    const fetchData = async (type, jsonFile) => {
+        var detailJson;
         let pId = -1;
         let strategyID = document.querySelector('#' + type);
         for (let pS in jsonFile) {
@@ -143,12 +172,20 @@ export const Home = () => {
             }
         }
         // console.log(pId);
+
+        console.log(".......................");
+        detailJson = await detailStrategiesSkeletonFunction(pId);
+        console.log(detailJson);
+        
         let tempObj;
         for (let i in detailJson) {
             if (detailJson[i].id === pId) {
                 tempObj = { ...detailJson[i] }
                 break;
             }
+        }
+        if(!tempObj){
+            tempObj = {...detailJson};
         }
         // console.log(tempObj);
         // let noOfEnteries = tempObj.instruments.length;
@@ -166,6 +203,9 @@ export const Home = () => {
         // console.log(objCommon)
         // let objMerge = {...objCommon,...tempObj.instruments[0]}
         let detailsArr = [];
+        console.log("detailjson and tempObj");
+        console.log(detailJson);
+        console.log(tempObj);
         for (let i in tempObj.instruments) {
             console.log("krishna")
             let objMerge = { ...objCommon, ...tempObj.instruments[i] }
@@ -222,6 +262,7 @@ export const Home = () => {
       };
 
       const handleEditFormChange = (event) => {
+        console.log('handleEditformchange')
         event.preventDefault();
     
         const fieldName = event.target.getAttribute("name");
@@ -234,6 +275,7 @@ export const Home = () => {
       };
 
       const handleEditFormSubmit = (event) => {
+          console.log('handleEditform')
         event.preventDefault();
     
         const editedDetails = {
@@ -259,18 +301,22 @@ export const Home = () => {
         setEditDetailId(null);
       };
 
-    const handleDetailsAdd = (event) => {
+    const handleDetailsAdd = async (event) => {
+        console.log("adddd");
         event.preventDefault();
         showTable(false);
         const table = document.querySelector('.dtable');
         table.style.display = 'block';
         if (selectedRadioBtn === 'popular') {
-            fetchData("strategy", popularStrategies, detailPopularStrategies);
+            console.log("22.......................");
+            fetchData("strategy", popularStrategies);
         }
         else if (selectedRadioBtn === 'custom' && addDetails.strategy !== 'custom') {
-            fetchData("strategy", customStrategies, detailCustomStrategies);
+            fetchData("strategy", customStrategies);
+           
         }
         else {
+            console.log("111.......................");
             const newDetail = {
                 id: nanoid(),
                 exchange: addDetails.exchange,
@@ -288,37 +334,42 @@ export const Home = () => {
         }
     }
 
+  
+
     const save = () => {
+        console.log("save")
         if (selectedRadioBtn === 'custom' && addDetails.strategy === 'custom') {
             toggleModal();
-            let id = detailCustomStrategies.length + 1;
+            
             let instruments = [];
             for (let i in details) {
                 let instObj = {
                     "segment": details[i].segment,
-                    "side": details[i].side,
-                    "quantity": details[i].quantity,
-                    "strike": details[i].strike,
-                    "type": details[i].type
+                    "Side": details[i].side,
+                    "Quantity": details[i].quantity,
+                    "StrikePrice": details[i].strike,
+                    "Type": details[i].type,
+                    "SkeletonId" : details[i].id
                 }
                 instruments.push(instObj);
             }
             let newCustomStrategy = {
-                "id": id,
-                "name": "",
-                "description": "",
-                "expiry": details[0].expiry,
-                "exchange": details[0].exchange,
+                "Name": "",
+                "DescriptionSkeleton": "",
+                "ExpiryDate": details[0].expiry,
+                "StockName": details[0].exchange,
                 "ticker": details[0].ticker,
-                "instruments": instruments
+                "listInstruments": instruments,
+                "InvestmentStrategySkeletonId" : details[0].InvestmentStrategySkeletonId
             }
-            detailCustomStrategies.push(newCustomStrategy);
+            
+            sendDataToBackend(newCustomStrategy);
         }
         else{
 
         }
     }
-
+console.log("abc")
     const openNavbar = () => {
         const navClose = document.querySelector('.navbar-close');
         const navOpen = document.querySelector('.navbar-open');
@@ -353,10 +404,10 @@ export const Home = () => {
         // }
         // setNameDesc(nD);
         toggleModal();
-        let l = detailCustomStrategies.length;
-        detailCustomStrategies[l-1].name = stName;
-        detailCustomStrategies[l-1].description = stDesc;
-        console.log(detailCustomStrategies);
+        // let l = detailCustomStrategies.length;
+        // detailCustomStrategies[l-1].name = stName;
+        // detailCustomStrategies[l-1].description = stDesc;
+        // console.log(detailCustomStrategies);
 
     }
 
