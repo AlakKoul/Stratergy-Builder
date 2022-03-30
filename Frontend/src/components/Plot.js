@@ -1,12 +1,18 @@
 import React from 'react'
-import coordinates from "./plots.json"
+import makeplot from "./plots"
 import Chart from 'react-google-charts'
 
-export const Plot = () => {
+export const Plot = (props) => {
     let scatterData = [
         ['Price', 'Profit'],
       ]
-    
+      
+      var {coordinates} = props.coordinates;
+      console.log(coordinates);
+      // var coordinates = {
+      //   xCoord : [20,30],
+      //   yCoord : [30,50]
+      // }
       for(let i in coordinates.xCoord){
         scatterData.push([coordinates.xCoord[i], coordinates.yCoord[i]]);
       }

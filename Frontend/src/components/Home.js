@@ -12,12 +12,15 @@ import detailStrategiesSkeletonFunction from "./detailCustomStrategies.js"
 import customStrategiesName from "./customStrategies"
 import { Link } from "react-router-dom"
 import { ReadOnlyRow } from './ReadOnlyRow'
+import makePlotFunction from './plots'
 import { Plot } from './Plot'
 import { EditableRow } from './EditableRow'
 
 
 export const Home = () => {
     
+    const [plotVisible,setPlotVisible] = useState(false); 
+    const [_coords,setCoords] = useState({});
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
     const [customStrategies,setcustomStrategies] = useState( [
         {
@@ -334,13 +337,32 @@ export const Home = () => {
         }
     }
 
+    const sendDataToBackend =  async (strategy) =>{
+    console.log(strategy)
+    const response = await fetch("http://localhost:8000/api/save/SaveStrategy", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(strategy)
+      });
+      const json = await response.json()
+      console.log(json);
+      if (!json.err){
+        console.log("register Successfull")
+      }
+      else{
+        console.log(json);
+        alert("Invalid !!");
+      }
+    }
   
 
-    const save = () => {
+    const save = async () => {
         console.log("save")
         if (selectedRadioBtn === 'custom' && addDetails.strategy === 'custom') {
             toggleModal();
-            
+        }   
             let instruments = [];
             for (let i in details) {
                 let instObj = {
@@ -358,16 +380,14 @@ export const Home = () => {
                 "DescriptionSkeleton": "",
                 "ExpiryDate": details[0].expiry,
                 "StockName": details[0].exchange,
-                "ticker": details[0].ticker,
+                "Ticker": details[0].ticker,
                 "listInstruments": instruments,
                 "InvestmentStrategySkeletonId" : details[0].InvestmentStrategySkeletonId
             }
             
-            sendDataToBackend(newCustomStrategy);
-        }
-        else{
-
-        }
+            await sendDataToBackend(newCustomStrategy);
+        
+        
     }
 console.log("abc")
     const openNavbar = () => {
@@ -394,6 +414,37 @@ console.log("abc")
     const toggleModal = () => {
         setModal(!modal);
     };
+
+    const makeplot = async () => {
+        let instruments = [];
+        for (let i in details) {
+            let instObj = {
+                "segment": details[i].segment,
+                "Side": details[i].side,
+                "Quantity": details[i].quantity,
+                "StrikePrice": details[i].strike,
+                "Type": details[i].type,
+                "SkeletonId" : details[i].id
+            }
+            instruments.push(instObj);
+        }
+        console.log(details)
+        let newCustomStrategy = {
+            "Name": "",
+            "DescriptionSkeleton": "",
+            "ExpiryDate": details[0].expiry,
+            "StockName": details[0].exchange,
+            "Ticker": details[0].ticker,
+            "listInstruments": instruments,
+            "InvestmentStrategySkeletonId" : details[0].InvestmentStrategySkeletonId
+        }
+        console.log(newCustomStrategy);
+      var coordinates = await makePlotFunction(newCustomStrategy);
+      console.log(coordinates);
+      setCoords(coordinates);
+      console.log(_coords);
+      setPlotVisible(true);
+    }
 
     const saveModal = ()=>{
         let stName =document.querySelector('.stName').value;
@@ -653,8 +704,10 @@ console.log("abc")
                         </table>
                         </form>
                         <button type='submit' className={`save-skeleton ${table == true ? 'customDiv' : ""} `} onClick={save}>Save</button>
+                        
+                        <button type='submit' onClick={makeplot}>Make Plot</button>
 
-                        <Plot/>
+                        {plotVisible && <Plot coordinates= {_coords}/> }
 
                         {modal && (
                             <div className="modal">
