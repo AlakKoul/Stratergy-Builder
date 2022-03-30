@@ -23,7 +23,7 @@ export const SignUp = () => {
     });
     const json = await response.json()
     console.log(json);
-    if (json.success){
+    if (!json.err){
         console.log("register Successfull")
     }
     else{
@@ -158,3 +158,89 @@ export const SignUp = () => {
     </>
     )
 }
+
+/*
+const response = await fetch("localhost:8000/api/send/customStrategy", {
+  method: 'GET',
+  headers: {
+      'Content-Type': 'application/json'
+  }
+});
+const json = await response.json()
+console.log(json);
+if (!json.err){
+  console.log("register Successfull")
+}
+else{
+  console.log(json);
+  alert("Invalid !!");
+}
+
+const response = await fetch("localhost:8000/api/send/popularStrategy", {
+  method: 'GET',
+  headers: {
+      'Content-Type': 'application/json'
+  }
+});
+const json = await response.json()
+console.log(json);
+if (!json.err){
+  console.log("register Successfull")
+}
+else{
+  console.log(json);
+  alert("Invalid !!");
+}
+
+
+const response = await fetch("localhost:8000/api/send/savedImplementation", {
+  method: 'GET',
+  headers: {
+      'Content-Type': 'application/json'
+  }
+});
+const json = await response.json()
+console.log(json);
+if (!json.err){
+  console.log("register Successfull")
+}
+else{
+  console.log(json);
+  alert("Invalid !!");
+}
+
+
+const response = await fetch("http://localhost:8000/api/send/savedSkeleton", {
+  method: 'GET',
+  headers: {
+      'Content-Type': 'application/json'
+  }
+});
+const json = await response.json()
+console.log(json);
+if (!json.err){
+  console.log("register Successfull")
+}
+else{
+  console.log(json);
+  alert("Invalid !!");
+}
+
+const response = await fetch("localhost:8000/api/fetch/MakePlot", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({StockName : , Ticker : ,ExpiryDate : , InvestmentStrategySkeletonId : , listInstruments : arrRows})
+        
+    });
+    const json = await response.json()
+    console.log(json);
+    if (!json.err){
+        plot = json;
+    }
+    else{
+        console.log(json);
+        alert("Invalid credentials");
+    }
+    */

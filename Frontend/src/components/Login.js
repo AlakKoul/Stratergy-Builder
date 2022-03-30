@@ -26,29 +26,28 @@ export const Login = () => {
       setPassword(event.target.value);
   }
 
-  // const handleSubmit = async (e)=>{
-  //   e.preventDefault(); 
-  //   const response = await fetch("http://localhost:8000/api/auth/login", {
-  //       method: 'POST',
-  //       headers: {
-  //           'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({email, password})
-  //   });
-  //   const json = await response.json()
-  //   console.log(json);
-  //   if (json.success){
-  //       console.log("Login Successfull");
-  //   }
-  //   else{
-  //       console.log(json);
-  //       alert("Invalid credentials");
-  //   }
-  // }
-  const handleSubmit = (e) =>{
+  const handleSubmit = async (e)=>{
     e.preventDefault(); 
-    history.push('/home');
+    const response = await fetch("http://localhost:8000/api/auth/login", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({email, password})
+    });
+    const json = await response.json()
+    console.log(json);
+    if (!(json.err)){
+      console.log(json);
+        console.log("Login Successfull");
+        history.push('/home');
+    }
+    else{
+        console.log(json);
+        alert("Invalid credentials");
+    }
   }
+ 
   return (
     <>
     <div className="login-component">
