@@ -15,17 +15,17 @@ import { ReadOnlyRow } from './ReadOnlyRow'
 import makePlotFunction from './plots'
 import { Plot } from './Plot'
 import { EditableRow } from './EditableRow'
-
+import SavedImplementations from './StrategyImplementationData';
 
 export const Home = () => {
-    
+    SavedImplementations()
     const [plotVisible,setPlotVisible] = useState(false); 
     const [_coords,setCoords] = useState({});
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
     const [customStrategies,setcustomStrategies] = useState( [
         {
             "id" : "1",
-            "name" : "Blank"
+            "name" : "custom"
         }
     ]);
 
@@ -79,7 +79,7 @@ export const Home = () => {
             //dataVal update
         };
         setAddDetails(newDetail);
-        if (segmentVal === 'Future') setStrikeAndType(true);
+        if (segmentVal === 'Futuree') setStrikeAndType(true);
 
     }, [])
 
@@ -144,7 +144,7 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if (fieldValue === 'Future')
+        if (fieldValue === 'Futuree')
             setStrikeAndType(true);
         else
             setStrikeAndType(false);
@@ -440,9 +440,7 @@ console.log("abc")
         }
         console.log(newCustomStrategy);
       var coordinates = await makePlotFunction(newCustomStrategy);
-      console.log(coordinates);
       setCoords(coordinates);
-      console.log(_coords);
       setPlotVisible(true);
     }
 
@@ -707,7 +705,7 @@ console.log("abc")
                         
                         <button type='submit' onClick={makeplot}>Make Plot</button>
 
-                        {plotVisible && <Plot coordinates= {_coords}/> }
+                        {plotVisible  && <Plot coordinates= {_coords} vv="aaa"/> }
 
                         {modal && (
                             <div className="modal">

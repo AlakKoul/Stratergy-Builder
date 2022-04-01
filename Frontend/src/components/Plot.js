@@ -7,14 +7,17 @@ export const Plot = (props) => {
         ['Price', 'Profit'],
       ]
       
-      var {coordinates} = props.coordinates;
-      console.log(coordinates);
+      var coordinates = props.coordinates;
+      console.log(props);
+  
       // var coordinates = {
       //   xCoord : [20,30],
       //   yCoord : [30,50]
       // }
-      for(let i in coordinates.xCoord){
-        scatterData.push([coordinates.xCoord[i], coordinates.yCoord[i]]);
+      console.log("startttt")
+  
+      for(let i in coordinates.xCoords){
+        scatterData.push([coordinates.xCoords[i], coordinates.yCoords[i]]);
       }
       let scatterOptions = {
         title: 'Price of Underlying vs. Profit',
