@@ -1,5 +1,5 @@
 
-const SavedStrategiesImplementation = async (id) =>{
+const SavedStrategyImplementation = async (id) =>{
     try{
     // const response = await fetch("localhost:8000/api/send/savedImplementation", {
     //     method: 'POST',
@@ -100,20 +100,51 @@ const SavedStrategiesImplementation = async (id) =>{
     console.log("instruments ================");
     console.log(detail.instruments);
     
-    
-    
-    
     var arr = [];
     arr.push(detail);
     
     console.log("finall");
     console.log(arr);
-    
-    
-      return arr;
-    
-     
+
+    return arr;
 }
+
+/*
+    Data Format
+
+    [
+        {
+            InvestmentStrategySkeletonId: 5,
+            exchange: "NSE",
+            expiry: "2022-04-01T18:30:00.000Z",
+            id: 3,
+            implementationDesc: undefined,
+            implementationName: undefined,
+            instruments:[
+                {   
+                    id: 3
+                    premium: 390
+                    price: undefined
+                    quantity: 4
+                    segment: "option"
+                    side: "BUY"
+                    strikePrice: 900
+                    type: "CALL"
+                },
+                {
+                    id: 4
+                    premium: 370
+                    price: undefined
+                    quantity: 4
+                    segment: "option"
+                    side: "BUY"
+                    strikePrice: 910
+                    type: "PUT"
+                }
+            ]
+        }
+    ]
+
+ */   
     
-    
-    module.exports = SavedStrategiesImplementation
+module.exports = SavedStrategyImplementation

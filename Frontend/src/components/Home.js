@@ -15,10 +15,10 @@ import { ReadOnlyRow } from './ReadOnlyRow'
 import makePlotFunction from './plots'
 import { Plot } from './Plot'
 import { EditableRow } from './EditableRow'
-import SavedImplementations from './StrategyImplementationData';
+import SavedStrategyImplementation from './StrategyImplementationData';
 
 export const Home = () => {
-    SavedImplementations()
+    
     const [plotVisible,setPlotVisible] = useState(false); 
     const [_coords,setCoords] = useState({});
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
