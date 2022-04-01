@@ -18,7 +18,7 @@ import { EditableRow } from './EditableRow'
 import SavedStrategyImplementation from './StrategyImplementationData';
 
 export const Home = () => {
-    
+    SavedStrategyImplementation()
     const [plotVisible,setPlotVisible] = useState(false); 
     const [_coords,setCoords] = useState({});
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');

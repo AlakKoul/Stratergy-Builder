@@ -64,14 +64,14 @@ const SavedStrategyImplementation = async (id) =>{
     
       var detail = {
         "id" : json.Id,
-        "implementationName" : json.StrategyName,
-        "implementationDesc" : json.ImplementationDescription,
+        "name" : json.StrategyName,
+        "description" : json.ImplementationDescription,
         "exchange" : json.StockName,
         "ticker" : json.Ticker,
         "expiry" : json.ExpiryDate,
         "InvestmentStrategySkeletonId" : json.InvestmentStrategySkeletonId,
-        "skeletonName" : json.SkeletonName,
-        "skeletonDesc" : json.SkeletonDescripion,
+        "strategyName" : json.SkeletonName,
+        "descriptionSkeleton" : json.SkeletonDescripion,
         "instruments" : [],
         
     }
@@ -114,12 +114,15 @@ const SavedStrategyImplementation = async (id) =>{
 
     [
         {
-            InvestmentStrategySkeletonId: 5,
-            exchange: "NSE",
-            expiry: "2022-04-01T18:30:00.000Z",
-            id: 3,
-            implementationDesc: undefined,
-            implementationName: undefined,
+            id: 3
+            InvestmentStrategySkeletonId: 5
+            description: undefined
+            descriptionSkeleton: undefined
+            exchange: "NSE"
+            expiry: "2022-04-01T18:30:00.000Z"
+            name: undefined
+            strategyName: undefined
+            ticker: "AARTIIND"
             instruments:[
                 {   
                     id: 3
