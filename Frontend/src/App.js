@@ -5,6 +5,7 @@ import { SignUp } from './components/SignUp';
 import { Login } from './components/Login';
 import { Home } from "./components/Home";
 import { ReadPStrategy } from "./components/ReadPStrategy";
+import AllImplementationsData  from './components/AllImplementationsData'
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
       </Route>
       <Route exact path="/home">
         <Home/>
+      </Route>
+      <Route exact path="/Implementations">
+        <AllImplementationsData/>
       </Route>
       <Route exact path="/read-p-strategy">
         <ReadPStrategy/>

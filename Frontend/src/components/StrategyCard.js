@@ -4,21 +4,22 @@ export default class StrategyCard extends Component {
   render() {
 
     let implementation = this.props.Implementation;
-    // name,imageUrl,githubUrl,linkedInUrl,college,status
+    
     return (
         <>
-            <div className='my-3'>
 
-                <div className="card" style={{width: "18rem"}}>
-                {/* <img className="card-img-top" src={userData.imageUrl} alt="Card image cap"/> */}
-                <div className="card-body">
-                    <h5 className="card-title"> {userData.name} </h5>
-                    <p className="card-text"> {userData.status} </p>
-                    <a href={userData.linkedInUrl} className="btn btn-sm btn-primary">LinkedIn Profile</a>
-                </div>
-                </div>
-
-            </div>;
+            <div class="card">
+              <h5 class="card-header">{implementation.Name}</h5>
+              <div class="card-body">
+                <h5 class="card-title"></h5>
+                <p class="card-title"><b>Strategy</b>: {implementation.StrategyName}</p>
+                <p class="card-text"> <b>Strategy Description</b> : {implementation.DescriptionSkeleton}</p>
+                <p class="card-text"> <b>Description</b> : {implementation.Description}</p>
+                <button type="button" class="btn btn-outline-secondary">{implementation.StockName}</button>
+                <button type="button" class="btn btn-outline-success">{implementation.Ticker}</button>
+              </div>
+            </div>
+            <br/>
         </>
       
     )
