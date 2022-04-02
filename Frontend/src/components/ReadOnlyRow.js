@@ -1,4 +1,5 @@
 import React from 'react'
+//import DeleteIcon from '@mui/icons-material/Delete';
 
 export const ReadOnlyRow = ({detail, handleEditClick, handleDeleteClick}) => {
     return (
@@ -10,18 +11,24 @@ export const ReadOnlyRow = ({detail, handleEditClick, handleDeleteClick}) => {
             <td>{detail.expiry}</td>
             <td>{detail.side}</td>
             <td>{detail.quantity}</td>
+            <td>{detail.price}</td>
             <td>{detail.strike}</td>
+            <td>{detail.premium}</td>
             <td>{detail.type}</td>
             <td>
-        <button
+
+            <button
           type="button"
           onClick={(event) => handleEditClick(event, detail)}
         >
           Edit
         </button>
-        <button type="button" onClick={() => handleDeleteClick(detail.id)} >
+        {/* <button type="button"  >
           Delete
-        </button>
+        </button> */}
+
+        <svg data-testid="DeleteIcon" onClick={() => handleDeleteClick(detail.id)}></svg>
+      
       </td>
         </tr>
     )

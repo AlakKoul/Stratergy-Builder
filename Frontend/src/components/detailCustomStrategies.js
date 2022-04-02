@@ -22,7 +22,7 @@ const response = await fetch("http://localhost:8000/api/send/savedSkeleton", {
     "name" : json.StrategyName,
     "desc" : json.Description,
     "instruments" : [],
-    "InvestmentStrategySkeletonId": json.listInstrumentSkeleton[0]
+    "InvestmentStrategySkeletonId": json.Id
 }
 
 

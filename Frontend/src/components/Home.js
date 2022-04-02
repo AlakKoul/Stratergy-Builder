@@ -18,21 +18,22 @@ import SavedStrategyImplementation from './StrategyImplementationData';
 import Nav from './Nav'
 
 export const Home = () => {
-    SavedStrategyImplementation()
+   
     const [plotVisible,setPlotVisible] = useState(false); 
     const [_coords,setCoords] = useState({});
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
     const [customStrategies,setcustomStrategies] = useState( [
         {
             "id" : "1",
-            "name" : "custom"
+            "name" : "blank"
         }
     ]);
 
+    const [skeletonId , setSkeletonId] = useState(-1);
     const [popularStrategies,setpopularStrategies] = useState([
         {
-        "id" : "1",
-        "name" : " "
+            "id" : "1",
+            "name" : "put call"
         }
     ])
   
@@ -43,17 +44,17 @@ export const Home = () => {
     
     
     const handleRadioClick = async (event) => {
-        if(customStrategies.length==1){
-            var temp1 = customStrategies;
-            var temp = await customStrategiesName();
-            temp.push(temp1[0]);
-            setcustomStrategies(temp);
-        }
+        // if(customStrategies.length==1){
+        //     var temp1 = customStrategies;
+        //     var temp = await customStrategiesName();
+        //     temp.push(temp1[0]);
+        //     setcustomStrategies(temp);
+        // }
 
-        if(popularStrategies.length==1){
-            var temp = await popularStrategiesName();
-            setpopularStrategies(temp);
-        }
+        // if(popularStrategies.length==1){
+        //     var temp = await popularStrategiesName();
+        //     setpopularStrategies(temp);
+        // }
         setDetails([]);
         showTable(true);
         setSelectedRadioBtn(event.target.value);
@@ -66,20 +67,28 @@ export const Home = () => {
         let typeVal = document.querySelector('#type').value;
         let sideVal = document.querySelector('#side').value;
         let strategyVal = document.querySelector('#strategy').value;
-        const newDetail = {
+        // let expiryVal = document.querySelector('#expiry').value;
+        // let priceVal = document.querySelector('#price').value;
+        // let strikepriceVal = document.querySelector('#strike').value;
+        // let quantity = document.querySelector('#quantity').value;
+        // console.log(quantity + " " + priceVal + " " + strikepriceVal + " " + expiryVal)
+         const newDetail = {
             exchange: exchangeVal,
             ticker: tickerVal,
             strategy: strategyVal,
             segment: segmentVal,
-            expiry: '',
+            expiry:'',// expiryVal,
             side: sideVal,
             quantity: '',
             strike: '',
-            type: segmentVal != 'custom' ? 'Db segment' : typeVal
+            price: '',
+            premium : '',
+            type: segmentVal != 'option' ? '_' : typeVal
             //dataVal update
         };
         setAddDetails(newDetail);
-        if (segmentVal === 'Futuree') setStrikeAndType(true);
+        if (segmentVal.toLowerCase() === 'option') setStrikeAndType(false);
+        else setStrikeAndType(true);
 
     }, [])
 
@@ -93,14 +102,17 @@ export const Home = () => {
         side: '',
         quantity: '',
         strike: '',
-        type: ''
+        type: '',
+        price : '',
+        premium : ''
     });
     const [custom, setCustom] = useState(true);
     const [table, showTable] = useState(true);
-    const [strikeAndType, setStrikeAndType] = useState(false);
+    const [strikeAndType, setStrikeAndType] = useState(true);
     const [isPriceVisible,setPriceVisibility] = useState(false);
+    const [nextButtonVisibility , setNextButtonVisibility] = useState(true);
 
-    const handleDetailsNonCustom = (event) => {
+    const handleDetailsStocks = (event) => {
         setDetails([]);
         showTable(true);
         let strategyID = document.querySelector('#strategy');
@@ -111,7 +123,7 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if (strategyID.value === 'custom')
+        if (strategyID.value === 'blank')
             setCustom(false);
         else
             setCustom(true);
@@ -120,10 +132,10 @@ export const Home = () => {
 
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.value;
-        if (fieldValue !== 'custom') {
-            showTable(true);
-            setDetails([]);
-        }
+       
+        showTable(true);
+        setDetails([]);
+        
         //fetch from database update dataVal {}
 
         event.preventDefault();
@@ -131,7 +143,7 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if (fieldValue === 'custom')
+        if (fieldValue === 'blank')
             setCustom(false);
         else
             setCustom(true);
@@ -145,18 +157,40 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if (fieldValue === 'Futuree')
-            setStrikeAndType(true);
-        else
+        if (fieldValue.ToLowerCase() === 'option'){
             setStrikeAndType(false);
+            setPriceVisibility(true);
+        }
+        else{
+            setStrikeAndType(true);
+            setPriceVisibility(false);
+        }
 
     };
+
+    const submit = (event) =>{
+        event.preventDefault();
+    }
+   
+
+    const changeButtonSubmit = (event) => {
+        event.preventDefault();
+        setNextButtonVisibility(true);
+        showTable(true);
+        setDetails([]);
+    }
+
     const handleDetailsCustom = (event) => {
         event.preventDefault();
         let quantityID = document.querySelector('#quantity');
         if (quantityID.value > 9999999) quantityID.value = 9999999;
+
         let strikeID = document.querySelector('#strike');
         if (strikeID.value > 10000) strikeID.value = 10000;
+
+        let priceID = document.querySelector('#price');
+        if (priceID.value > 10000) priceID.value = 10000;
+
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.value;
         const newFormData = { ...addDetails };
@@ -165,35 +199,27 @@ export const Home = () => {
         setAddDetails(newFormData);
 
     };
-    const fetchData = async (type, jsonFile) => {
+    const fetchData = async (strategy, jsonFile) => {
         var detailJson;
         let pId = -1;
-        let strategyID = document.querySelector('#' + type);
+        let strategyID = document.querySelector('#' + strategy);
         for (let pS in jsonFile) {
             if (jsonFile[pS].name === strategyID.value) {
                 pId = jsonFile[pS].id;
                 break;
             }
         }
+
+        setSkeletonId(pId);
         // console.log(pId);
 
         console.log(".......................");
         detailJson = await detailStrategiesSkeletonFunction(pId);
-        console.log(detailJson);
+     //   console.log(detailJson);
         
         let tempObj;
-        for (let i in detailJson) {
-            if (detailJson[i].id === pId) {
-                tempObj = { ...detailJson[i] }
-                break;
-            }
-        }
-        if(!tempObj){
-            tempObj = {...detailJson};
-        }
-        // console.log(tempObj);
-        // let noOfEnteries = tempObj.instruments.length;
-        // console.log(noOfEnteries);
+        tempObj = { ...detailJson[0] }
+       
         let exchangeVal = addDetails.exchange;
         let tickerVal = addDetails.ticker;
         let strategyVal = addDetails.strategy;
@@ -204,20 +230,20 @@ export const Home = () => {
             "strategy": strategyVal,
             "expiry": expiryVal
         }
-        // console.log(objCommon)
-        // let objMerge = {...objCommon,...tempObj.instruments[0]}
-        let detailsArr = [];
+         let detailsArr = [];
         console.log("detailjson and tempObj");
-        console.log(detailJson);
-        console.log(tempObj);
+        // console.log(detailJson);
+         console.log(tempObj);
+        // console.log(objCommon)
+        console.log(tempObj.InvestmentStrategySkeletonId);
+        console.log(tempObj.instruments)
         for (let i in tempObj.instruments) {
             console.log("krishna")
             let objMerge = { ...objCommon, ...tempObj.instruments[i] }
             detailsArr.push(objMerge);
         }
-        // console.log(detailsArr);
         setDetails(detailsArr);
-
+        console.log(details)
     }
     const [editDetailId, setEditDetailId] = useState(null);
     const [editFormData, setEditFormData] = useState({
@@ -229,7 +255,9 @@ export const Home = () => {
         side: '',
         quantity: '',
         strike: '',
-        type: ''
+        type: '',
+        price : '',
+        premium : '',
       });
     const handleEditClick = (event, detail) => {
         event.preventDefault();
@@ -245,7 +273,9 @@ export const Home = () => {
             side: detail.side,
             quantity: detail.quantity,
             strike: detail.strike,
-            type: detail.type
+            type: detail.type,
+            price : detail.price,
+            premium : detail.premium
         };
     
         setEditFormData(formValues);
@@ -292,7 +322,9 @@ export const Home = () => {
             side: editFormData.side,
             quantity: editFormData.quantity,
             strike: editFormData.strike,
-            type: editFormData.type
+            type: editFormData.type,
+            price : editFormData.price,
+            premium : editFormData.premium
         };
     
         const newDetails = [...details];
@@ -304,38 +336,57 @@ export const Home = () => {
         setDetails(newDetails);
         setEditDetailId(null);
       };
-
-    const handleDetailsAdd = async (event) => {
-        console.log("adddd");
+    
+   
+    const handleDetailsAdd = (event) => {
         event.preventDefault();
+        console.log("next button pressed")
+        
+        setNextButtonVisibility(false);
+        
+        if(addDetails.strategy === 'blank'){
+            setCustom(false);
+        }
+       
+        
+        console.log("adddd");
+        
         showTable(false);
         const table = document.querySelector('.dtable');
         table.style.display = 'block';
         if (selectedRadioBtn === 'popular') {
             console.log("22.......................");
+            
             fetchData("strategy", popularStrategies);
         }
-        else if (selectedRadioBtn === 'custom' && addDetails.strategy !== 'custom') {
+        else if (selectedRadioBtn === 'custom' && addDetails.strategy !== 'blank') {
             fetchData("strategy", customStrategies);
-           
         }
-        else {
-            console.log("111.......................");
-            const newDetail = {
-                id: nanoid(),
-                exchange: addDetails.exchange,
-                ticker: addDetails.ticker,
-                strategy: addDetails.strategy,
-                segment: addDetails.strategy != 'custom' ? 'Db segment' : addDetails.segment,
-                expiry: addDetails.expiry,
-                side: addDetails.strategy != 'custom' ? 'Db side' : addDetails.side,
-                quantity: addDetails.strategy != 'custom' ? 'Db side' : addDetails.quantity,
-                strike: addDetails.segment === 'Future' ? '' : addDetails.strike,
-                type: addDetails.segment === 'Future' ? '' : addDetails.type
-            };
-            const newDetails = [...details, newDetail];
-            setDetails(newDetails);
-        }
+       
+    }
+
+    const addInstrument = (event) =>{
+        setCustom(true);
+        showTable(false);
+
+        event.preventDefault();
+
+        console.log("111.......................");
+        const newDetail = {
+            id: nanoid(),
+            exchange: addDetails.exchange,
+            ticker: addDetails.ticker,
+            strategy: addDetails.strategy,
+            segment: addDetails.strategy === 'blank' ? 'Db segment' : addDetails.segment,
+            expiry: addDetails.expiry,
+            side: addDetails.side,
+            strike: addDetails.segment.toLowerCase() === 'option' ? addDetails.strike : '_',
+            type: addDetails.segment.toLowerCase() === 'option' ? addDetails.type : '_',
+            price : addDetails.segment.toLowerCase() === 'option' ? '_' : addDetails,
+            premium : addDetails.segment.toLowerCase() === 'option' ? addDetails.premium : ''
+        };
+        const newDetails = [...details, newDetail];
+        setDetails(newDetails);
     }
 
     const sendDataToBackend =  async (strategy) =>{
@@ -358,37 +409,41 @@ export const Home = () => {
       }
     }
   
-
+    const changeFormatToSend = () =>{
+        let instruments = [];
+        for (let i in details) {
+            let instObj = {
+                "segment": details[i].segment,
+                "Side": details[i].side,
+                "Quantity": details[i].quantity,
+                "StrikePrice": details[i].strike,
+                "Type": details[i].type,
+                "Price" : details[i].price,
+                "Premium" : details[i].premium
+            }
+            instruments.push(instObj);
+        }
+        let newCustomStrategy = {
+            "Name": "",
+            "StrategyName" : "",
+            "Description" : "",
+            "DescriptionSkeleton": "",
+            "ExpiryDate": details[0].expiry,
+            "StockName": details[0].exchange,
+            "Ticker": details[0].ticker,
+            "listInstruments": instruments,
+            "InvestmentStrategySkeletonId" : skeletonId
+        }
+        return newCustomStrategy;
+    }
     const save = async () => {
         console.log("save")
         if (selectedRadioBtn === 'custom' && addDetails.strategy === 'custom') {
             toggleModal();
         }   
-            let instruments = [];
-            for (let i in details) {
-                let instObj = {
-                    "segment": details[i].segment,
-                    "Side": details[i].side,
-                    "Quantity": details[i].quantity,
-                    "StrikePrice": details[i].strike,
-                    "Type": details[i].type,
-                    "SkeletonId" : details[i].id
-                }
-                instruments.push(instObj);
-            }
-            let newCustomStrategy = {
-                "Name": "",
-                "DescriptionSkeleton": "",
-                "ExpiryDate": details[0].expiry,
-                "StockName": details[0].exchange,
-                "Ticker": details[0].ticker,
-                "listInstruments": instruments,
-                "InvestmentStrategySkeletonId" : details[0].InvestmentStrategySkeletonId
-            }
-            
-            await sendDataToBackend(newCustomStrategy);
-        
-        
+           
+        var newCustomStrategy = changeFormatToSend();
+        await sendDataToBackend(newCustomStrategy);
     }
 
     const disablePastDate = () => {
@@ -405,28 +460,8 @@ export const Home = () => {
     };
 
     const makeplot = async () => {
-        let instruments = [];
-        for (let i in details) {
-            let instObj = {
-                "segment": details[i].segment,
-                "Side": details[i].side,
-                "Quantity": details[i].quantity,
-                "StrikePrice": details[i].strike,
-                "Type": details[i].type,
-                "SkeletonId" : details[i].id
-            }
-            instruments.push(instObj);
-        }
-        console.log(details)
-        let newCustomStrategy = {
-            "Name": "",
-            "DescriptionSkeleton": "",
-            "ExpiryDate": details[0].expiry,
-            "StockName": details[0].exchange,
-            "Ticker": details[0].ticker,
-            "listInstruments": instruments,
-            "InvestmentStrategySkeletonId" : details[0].InvestmentStrategySkeletonId
-        }
+       
+        var newCustomStrategy = changeFormatToSend();
         console.log(newCustomStrategy);
       var coordinates = await makePlotFunction(newCustomStrategy);
       setCoords(coordinates);
@@ -459,7 +494,8 @@ export const Home = () => {
             <div className='home'>
                 <div className='main'>
                     <p className='heading'>Select Products</p>
-                    <form onSubmit={handleDetailsAdd} >
+                    <form action="#" onSubmit={submit}>
+                      <div> 
                         <div className="main-select-products">
                             <div className='select-products'>
                                 <p className='sub-heading-1st'>Exchange</p>
@@ -467,7 +503,7 @@ export const Home = () => {
                                     name="exchange"
                                     id="exchange"
                                     className='products'
-                                    onChange={handleDetailsNonCustom}
+                                    onChange={handleDetailsStocks}
                                 >
                                     {
                                         exchangeData.map((data) => {
@@ -482,7 +518,7 @@ export const Home = () => {
                                     name="ticker"
                                     id="ticker"
                                     className='products'
-                                    onChange={handleDetailsNonCustom}
+                                    onChange={handleDetailsStocks}
                                 >
 
                                     {
@@ -499,7 +535,7 @@ export const Home = () => {
                                     required
                                     name="expiry"
                                     className='products'
-                                    onChange={handleDetailsNonCustom}
+                                    onChange={handleDetailsStocks}
                                 />
                             </div>
                             <div className='select-products'>
@@ -552,9 +588,17 @@ export const Home = () => {
                             </div>
                             <div className='select-products'></div>
                             <div className='select-products'></div>
-                            <div className='select-products'></div>
+                            <div className='select-products'></div>                
                         </div>
+                      </div>
+                        {
+                            (nextButtonVisibility) && <button type="button" onClick={handleDetailsAdd} className='next-button'>Next</button>
+                        }
+                        { 
+                            (!nextButtonVisibility) && <button type="button" onClick={changeButtonSubmit} className='next-button'>Change</button>
+                        }
 
+                    <div>
                         <div className={`main-select-products ${custom === true ? 'customDiv' : ''}`} >
                             <div className='select-products'>
                                 <p className='sub-heading-1st' >Segment</p>
@@ -602,9 +646,37 @@ export const Home = () => {
                                 >
                                 </input>
                             </div>
+
+                            <div className={`select-products ${ (isPriceVisible === true || strikeAndType===true ) ? 'customDiv' : ''}`}>
+                                    {/* <div className='select-products customDiv'> */}
+                                    <p className='sub-heading-1st' >Price</p>
+
+                                    <input
+                                        name="price"
+                                        id="price"
+                                        className='products'
+                                        type="number"
+                                        min={0}
+                                        max={10000}
+                                        value={addDetails.price}
+                                        onChange={handleDetailsCustom}
+                                    >
+                                    </input>
+                            </div>
+
+                            { !strikeAndType &&  <div className='select-products'></div> }
+                           
+                        </div>
+
+                      
+
+                        <div className={`main-select-products ${custom === true ? 'customDiv' : ''} `}>
+                            
+                           
+
                             <div className={`select-products ${strikeAndType === true ? 'customDiv' : ''}`}>
                                 {/* <div className='select-products customDiv'> */}
-                                <p className='sub-heading-1st' >Strike</p>
+                                <p className='sub-heading-1st' >Strike Price</p>
 
                                 <input
                                     name="strike"
@@ -618,28 +690,45 @@ export const Home = () => {
                                 >
                                 </input>
                             </div>
-                        </div>
-                        <div className={`main-select-products ${custom === true ? 'customDiv' : ''} `}>
-                            <div className={`select-products ${strikeAndType === true ? 'customDiv' : ''}`}>
-                                <p className='sub-heading-1st' >Type</p>
-                                <select
-                                    name="type"
-                                    id="type"
-                                    className='products'
-                                    onChange={handleDetailsCustom}>
-                                    {
-                                        typeData.map((data) => {
-                                            return <option value={data.name}>{data.name}</option>
-                                        })
-                                    }
-                                </select>
-                            </div>
-                            <div className='select-products'></div>
-                            <div className='select-products'></div>
-                            <div className='select-products'></div>
-                        </div>
-                        <button type='submit' className='next-button'>Add</button>
 
+                            <div className={`select-products ${strikeAndType === true ? 'customDiv' : ''}`}>
+                                {/* <div className='select-products customDiv'> */}
+                                <p className='sub-heading-1st' >Premium</p>
+
+                                <input
+                                    name="premium"
+                                    id="premium"
+                                    className='products'
+                                    type="number"
+                                    min={0}
+                                    max={10000}
+                                    value={addDetails.strike}
+                                    onChange={handleDetailsCustom}
+                                >
+                                </input>
+                            </div>
+                        
+                            <div className={`select-products ${strikeAndType === true ? 'customDiv' : ''}`}>
+                                    <p className='sub-heading-1st' >Type</p>
+                                    <select
+                                        name="type"
+                                        id="type"
+                                        className='products'
+                                        onChange={handleDetailsCustom}>
+                                        {
+                                            typeData.map((data) => {
+                                                return <option value={data.name}>{data.name}</option>
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                            <div className='select-products'></div>
+                            <div className='select-products'></div>
+                            <div className='select-products'></div>
+                        </div>
+                         <button type="button" onClick={addInstrument} className='next-button'>Add</button>
+                      
+                      </div> 
                     </form>
 
                     <div className='dtable' >
@@ -654,7 +743,9 @@ export const Home = () => {
                                     <th>Expiry</th>
                                     <th>Side</th>
                                     <th>Quantity</th>
-                                    <th>Strike</th>
+                                    <th> Price</th>
+                                    <th>Strike Price</th>
+                                    <th>Premium</th>
                                     <th>Type</th>
                                     <th>Actions</th>
                                 </tr>
@@ -680,8 +771,8 @@ export const Home = () => {
                             </tbody>
                         </table>
                         </form>
-                        <button type='submit' className={`save-skeleton ${table == true ? 'customDiv' : ""} `} onClick={save}>Save</button>
-                        
+                        {/* <button type='submit' className={`save-skeleton ${table == true ? 'customDiv' : ""} `} onClick={save}>Save</button>
+                         */}
                         <button type='submit' onClick={makeplot}>Make Plot</button>
 
                         {plotVisible  && <Plot coordinates= {_coords} vv="aaa"/> }
