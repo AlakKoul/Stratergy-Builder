@@ -20,7 +20,7 @@ export const ViewStrategy = (props) => {
     return (
         <>
             <div>
-            <h3>Table</h3>
+            <h2>Table</h2>
                 <table className='view-table'>
                     <thead>
                         <tr>
@@ -55,7 +55,7 @@ export const ViewStrategy = (props) => {
                 </table>
             </div>
             <div>
-            <h3>Graph</h3>
+            <h2>Graph</h2>
             {/* <Plot coordinates= {_coords} vv="aaa"/> */}
             </div>
         </>

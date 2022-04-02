@@ -82,18 +82,21 @@ export default class AllImplementationsData extends Component {
   render() {
     return (
       <>
-        <div className='container my-3'>
+      <div className='allImplementations'>
+      <h1 className='all-imp'> Strategy Implementations </h1>
+
+        <div >
           
-            <h3> Strategy Implementations </h3>
             
             <div>
               {this.state.implementationsData.map((element)=>{
-                  return <div key={element.Id}>
+                return <div key={element.Id}>
                       <StrategyCard Implementation={element}/>
                    </div> 
               })}
             </div>
         </div>
+              </div>
       </>
     )
   }

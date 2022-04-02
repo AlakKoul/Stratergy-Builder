@@ -21,8 +21,8 @@ export default class StrategyCard extends Component {
                 <p class="card-title"><b>Strategy</b>: {implementation.StrategyName}</p>
                 <p class="card-text"> <b>Strategy Description</b> : {implementation.DescriptionSkeleton}</p>
                 <p class="card-text"> <b>Description</b> : {implementation.Description}</p>
-                <button type="button" class="btn btn-outline-secondary">{implementation.StockName}</button>
-                <button type="button" class="btn btn-outline-success">{implementation.Ticker}</button>
+                <p class="card-text"> <b>Stock</b> : {implementation.StockName}</p>
+                <p class="card-text"> <b>Ticker</b> : {implementation.Ticker}</p>
               </div>
             </div>
             <br/>
