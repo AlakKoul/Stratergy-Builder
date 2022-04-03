@@ -16,24 +16,49 @@ import { Plot } from './Plot'
 import { EditableRow } from './EditableRow'
 import SavedStrategyImplementation from './StrategyImplementationData';
 import Nav from './Nav'
+import StockSelectedCard from './StockSelectedCard'
 
 export const Home = () => {
    
+    const [alertt,setAlert] = useState(false);
+    const [alertContent,setAlertContent] = useState('');
     const [plotVisible,setPlotVisible] = useState(false); 
     const [_coords,setCoords] = useState({});
+    const [isSkeletonSave , setIsSkeletonSave] = useState(false);
+    const [isImplementationSave , setIsImplementationSave] = useState(true);
     const [selectedRadioBtn, setSelectedRadioBtn] = useState('popular');
     const [customStrategies,setcustomStrategies] = useState( [
         {
             "id" : "1",
+            "name" : "abc"
+        },
+        {
+            "id" : "2",
             "name" : "blank"
         }
     ]);
 
+
+    const [desc,setDesc] = useState({
+        "Name" : "",
+        "Description" : "",
+        "StrategyName" : "",
+        "DescriptionSkeleton" : ""
+    })
+
     const [skeletonId , setSkeletonId] = useState(-1);
     const [popularStrategies,setpopularStrategies] = useState([
         {
-            "id" : "1",
+            "id" : "0",
             "name" : "put call"
+        },
+        {
+            "id" : "1",
+            "name" : "PUT BUY"
+        },
+        {
+            "id" : "2",
+            "name" : "put buy"
         }
     ])
   
@@ -42,53 +67,19 @@ export const Home = () => {
     }
     var detailCustomStrategies;
     
+    const addRow = () => {
+        if(custom)   setCustom(false);
+
+
+    }
     
     const handleRadioClick = async (event) => {
-        // if(customStrategies.length==1){
-        //     var temp1 = customStrategies;
-        //     var temp = await customStrategiesName();
-        //     temp.push(temp1[0]);
-        //     setcustomStrategies(temp);
-        // }
-
-        // if(popularStrategies.length==1){
-        //     var temp = await popularStrategiesName();
-        //     setpopularStrategies(temp);
-        // }
         setDetails([]);
         showTable(true);
         setSelectedRadioBtn(event.target.value);
     }
     //const dataVal = {type:'',}
     useEffect(() => {
-        let exchangeVal = document.querySelector('#exchange').value;
-        let tickerVal = document.querySelector('#ticker').value;
-        let segmentVal = document.querySelector('#segment').value;
-        let typeVal = document.querySelector('#type').value;
-        let sideVal = document.querySelector('#side').value;
-        let strategyVal = document.querySelector('#strategy').value;
-        // let expiryVal = document.querySelector('#expiry').value;
-        // let priceVal = document.querySelector('#price').value;
-        // let strikepriceVal = document.querySelector('#strike').value;
-        // let quantity = document.querySelector('#quantity').value;
-        // console.log(quantity + " " + priceVal + " " + strikepriceVal + " " + expiryVal)
-         const newDetail = {
-            exchange: exchangeVal,
-            ticker: tickerVal,
-            strategy: strategyVal,
-            segment: segmentVal,
-            expiry:'',// expiryVal,
-            side: sideVal,
-            quantity: '',
-            strike: '',
-            price: '',
-            premium : '',
-            type: segmentVal != 'option' ? '_' : typeVal
-            //dataVal update
-        };
-        setAddDetails(newDetail);
-        if (segmentVal.toLowerCase() === 'option') setStrikeAndType(false);
-        else setStrikeAndType(true);
 
     }, [])
 
@@ -123,11 +114,37 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if (strategyID.value === 'blank')
-            setCustom(false);
-        else
-            setCustom(true);
+       
+        if(!custom)  setCustom(true);
+        
+        console.log(addDetails)
+
     };
+
+    const fetchStrategyName = async () => {
+        console.log("fetch strategy name")
+
+        var t = {
+            "id" : "a",
+            "name" : ""
+        }
+
+        if(selectedRadioBtn == 'popular' ){
+            var temp = await popularStrategiesName();
+            temp = [t , ... temp]
+            setpopularStrategies(temp);
+        }else{
+            var temp = await customStrategiesName();
+            var b = {
+                "id" : "0",
+                "name" : "blank"
+            }
+            temp = [t , ... temp]
+            temp.push(b);
+            setcustomStrategies(temp);
+        }
+
+    }
     const handleDetailsStratergy = (event) => {
 
         const fieldName = event.target.getAttribute('name');
@@ -136,6 +153,8 @@ export const Home = () => {
         showTable(true);
         setDetails([]);
         
+        if(custom===false) setCustom(true)
+        
         //fetch from database update dataVal {}
 
         event.preventDefault();
@@ -143,10 +162,6 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if (fieldValue === 'blank')
-            setCustom(false);
-        else
-            setCustom(true);
 
     };
     const handleDetailsSegment = (event) => {
@@ -157,7 +172,8 @@ export const Home = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddDetails(newFormData);
-        if (fieldValue.ToLowerCase() === 'option'){
+        if (fieldValue.toLowerCase() === 'option'){
+            console.log("selected option")
             setStrikeAndType(false);
             setPriceVisibility(true);
         }
@@ -176,7 +192,9 @@ export const Home = () => {
     const changeButtonSubmit = (event) => {
         event.preventDefault();
         setNextButtonVisibility(true);
+        setAlert(false)
         showTable(true);
+        setCustom(true);
         setDetails([]);
     }
 
@@ -199,6 +217,9 @@ export const Home = () => {
         setAddDetails(newFormData);
 
     };
+
+ 
+
     const fetchData = async (strategy, jsonFile) => {
         var detailJson;
         let pId = -1;
@@ -224,6 +245,9 @@ export const Home = () => {
         let tickerVal = addDetails.ticker;
         let strategyVal = addDetails.strategy;
         let expiryVal = addDetails.expiry;
+
+       
+
         let objCommon = {
             "exchange": exchangeVal,
             "ticker": tickerVal,
@@ -235,6 +259,13 @@ export const Home = () => {
         // console.log(detailJson);
          console.log(tempObj);
         // console.log(objCommon)
+
+        let objDesc = desc;
+        objDesc.StrategyName = tempObj.name;
+        objDesc.DescriptionSkeleton = tempObj.desc;
+        setDesc(objDesc);
+        console.log(desc);
+
         console.log(tempObj.InvestmentStrategySkeletonId);
         console.log(tempObj.instruments)
         for (let i in tempObj.instruments) {
@@ -259,6 +290,10 @@ export const Home = () => {
         price : '',
         premium : '',
       });
+
+      const handleClose = () =>{
+          setModal(false);
+      }
     const handleEditClick = (event, detail) => {
         event.preventDefault();
         setEditDetailId(detail.id);
@@ -341,11 +376,12 @@ export const Home = () => {
     const handleDetailsAdd = (event) => {
         event.preventDefault();
         console.log("next button pressed")
-        
+        console.log(addDetails.strategy);
         setNextButtonVisibility(false);
-        
+        console.log(addDetails.strategy)
         if(addDetails.strategy === 'blank'){
             setCustom(false);
+            return
         }
        
         
@@ -366,42 +402,69 @@ export const Home = () => {
     }
 
     const addInstrument = (event) =>{
-        setCustom(true);
-        showTable(false);
-
         event.preventDefault();
+        setIsSkeletonSave(true);
+        setAlert(false);
+        setIsImplementationSave(true)
+        setCustom(true);
+        if(table)  showTable(false);
+        console.log(addDetails)
+        
 
         console.log("111.......................");
+
         const newDetail = {
             id: nanoid(),
             exchange: addDetails.exchange,
             ticker: addDetails.ticker,
             strategy: addDetails.strategy,
-            segment: addDetails.strategy === 'blank' ? 'Db segment' : addDetails.segment,
+            segment:  addDetails.segment,
             expiry: addDetails.expiry,
             side: addDetails.side,
-            strike: addDetails.segment.toLowerCase() === 'option' ? addDetails.strike : '_',
-            type: addDetails.segment.toLowerCase() === 'option' ? addDetails.type : '_',
-            price : addDetails.segment.toLowerCase() === 'option' ? '_' : addDetails,
-            premium : addDetails.segment.toLowerCase() === 'option' ? addDetails.premium : ''
+            quantity : addDetails.quantity,
+            strike: addDetails.segment === 'Option' ? addDetails.strike : '_',
+            type: addDetails.segment === 'Option' ? addDetails.type : '_',
+            price : addDetails.segment === 'Option' ? '_' : addDetails.price,
+            premium : addDetails.segment === 'Option' ? addDetails.premium : '_'
         };
+        console.log(newDetail);
         const newDetails = [...details, newDetail];
         setDetails(newDetails);
     }
 
-    const sendDataToBackend =  async (strategy) =>{
+    const sendDataToBackend =  async (strategy,flag) =>{
     console.log(strategy)
-    const response = await fetch("http://localhost:8000/api/save/SaveStrategy", {
+    
+    var url = "";
+    if(flag){
+        url = "http://localhost:8000/api/save/SaveStrategy";
+    }else{
+        url = "http://localhost:8000/api/save/SaveStrategySkeleton"
+    }
+
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(strategy)
       });
+      console.log(response)
       const json = await response.json()
       console.log(json);
       if (!json.err){
+        
+        if(flag){
+            setIsImplementationSave(false)
+        }
         console.log("register Successfull")
+        setAlert(true);
+        console.log(alertt)
+        setAlertContent('Your Data is saved successfully');
+        setIsSkeletonSave(false);
+
+        if(isImplementationSave) setIsImplementationSave(false)
+        return json;
       }
       else{
         console.log(json);
@@ -409,7 +472,7 @@ export const Home = () => {
       }
     }
   
-    const changeFormatToSend = () =>{
+    const changeFormatToSend = (objDesc) =>{
         let instruments = [];
         for (let i in details) {
             let instObj = {
@@ -424,26 +487,22 @@ export const Home = () => {
             instruments.push(instObj);
         }
         let newCustomStrategy = {
-            "Name": "",
-            "StrategyName" : "",
-            "Description" : "",
-            "DescriptionSkeleton": "",
+            "Name": (objDesc) ? objDesc.Name : '',
+            "StrategyName" :(objDesc) ? objDesc.StrategyName : '',
+            "Description" :(objDesc) ? objDesc.Description : '' ,
+            "DescriptionSkeleton": (objDesc) ? objDesc.DescriptionSkeleton : '',
             "ExpiryDate": details[0].expiry,
             "StockName": details[0].exchange,
             "Ticker": details[0].ticker,
             "listInstruments": instruments,
-            "InvestmentStrategySkeletonId" : skeletonId
+            "InvestmentStrategySkeletonId" : skeletonId,
+            "isSkeletonSaved" : !isSkeletonSave
         }
         return newCustomStrategy;
     }
     const save = async () => {
-        console.log("save")
-        if (selectedRadioBtn === 'custom' && addDetails.strategy === 'custom') {
-            toggleModal();
-        }   
-           
-        var newCustomStrategy = changeFormatToSend();
-        await sendDataToBackend(newCustomStrategy);
+       
+       
     }
 
     const disablePastDate = () => {
@@ -454,48 +513,85 @@ export const Home = () => {
         return yyyy + "-" + mm + "-" + dd;
     };
     const [modal, setModal] = useState(false);
-    // const [nameDesc, setNameDesc]=useState({});
     const toggleModal = () => {
         setModal(!modal);
     };
+    // const [nameDesc, setNameDesc]=useState({});
+  
 
     const makeplot = async () => {
        
         var newCustomStrategy = changeFormatToSend();
         console.log(newCustomStrategy);
-      var coordinates = await makePlotFunction(newCustomStrategy);
-      setCoords(coordinates);
-      setPlotVisible(true);
+        var coordinates = await makePlotFunction(newCustomStrategy);
+        setCoords(coordinates);
+        setPlotVisible(true);
+    }
+
+    const saveModalSkeleton = () => {
+        setIsImplementationSave(false);
     }
 
     const saveModal = ()=>{
-        let stName =document.querySelector('.stName').value;
-        let stDesc =document.querySelector('.stDesc').value;
-        // let nD ={
-        //     "name":stName,
-        //     "description":stDesc
-        // }
-        // setNameDesc(nD);
-        toggleModal();
-        // let l = detailCustomStrategies.length;
-        // detailCustomStrategies[l-1].name = stName;
-        // detailCustomStrategies[l-1].description = stDesc;
-        // console.log(detailCustomStrategies);
-
+        setIsImplementationSave(true);
     }
+
+    const saveModalData = async () =>{
+
+        let stName =(document.querySelector('#StrategyName')) ? document.querySelector('#StrategyName').value : "";
+        let stDesc = (document.querySelector('#DescriptionSkeleton')) ? document.querySelector('#DescriptionSkeleton').value : "";
+
+        let Name =(document.querySelector('#Name')) ? document.querySelector('#Name').value : "";
+        let Desc = (document.querySelector('#Description')) ? document.querySelector('#Description').value : "";
+        
+        var obj = {
+            "Name" : (Name!=="") ? Name : desc.Name,
+            "Description" : (Desc!=="") ? Desc : desc.Description,
+            "StrategyName": (stName!=="") ? stName : desc.StrategyName,
+            "DescriptionSkeleton" : (stDesc!=="") ? stDesc : desc.DescriptionSkeleton
+        }
+      
+        console.log(obj)
+
+        
+        setDesc(obj);
+        console.log(desc);
+        console.log("save")
+      
+        var newCustomStrategy = changeFormatToSend(obj);
+        var response = await sendDataToBackend(newCustomStrategy,isImplementationSave);
+        
+        console.log(newCustomStrategy);
+
+        if(isImplementationSave) setIsImplementationSave(false);
+        if(isSkeletonSave) setIsSkeletonSave(false);
+    }
+
+   
 
     
 
     return (
         <>
+           
+
+           {
+               alertt && 
+               <div class="alert alert-primary" role="alert">
+                  {alertContent}
+               </div>
+           }
+
             <Nav/>
-         
 
             <div className='home'>
                 <div className='main'>
-                    <p className='heading'>Select Products</p>
+                    
                     <form action="#" onSubmit={submit}>
-                      <div> 
+                      {nextButtonVisibility &&
+                        
+                        <div> 
+                            <p className='heading'>Select Products</p>
                         <div className="main-select-products">
                             <div className='select-products'>
                                 <p className='sub-heading-1st'>Exchange</p>
@@ -503,7 +599,7 @@ export const Home = () => {
                                     name="exchange"
                                     id="exchange"
                                     className='products'
-                                    onChange={handleDetailsStocks}
+                                    onChange={handleDetailsStocks} 
                                 >
                                     {
                                         exchangeData.map((data) => {
@@ -574,6 +670,7 @@ export const Home = () => {
                                     name="strategy"
                                     id="strategy"
                                     className='products'
+                                    onClick={fetchStrategyName}
                                     onChange={handleDetailsStratergy}
                                 >
                                     {selectedRadioBtn == 'popular' ?
@@ -591,14 +688,19 @@ export const Home = () => {
                             <div className='select-products'></div>                
                         </div>
                       </div>
+                    }
+
+                    {
+                        (!nextButtonVisibility) && <StockSelectedCard Data={addDetails} nextOnClick={changeButtonSubmit} Desc={desc}/>
+                    }
                         {
                             (nextButtonVisibility) && <button type="button" onClick={handleDetailsAdd} className='next-button'>Next</button>
                         }
-                        { 
+                        {/* { 
                             (!nextButtonVisibility) && <button type="button" onClick={changeButtonSubmit} className='next-button'>Change</button>
-                        }
+                        } */}
 
-                    <div>
+                    { (!custom) && <div>
                         <div className={`main-select-products ${custom === true ? 'customDiv' : ''}`} >
                             <div className='select-products'>
                                 <p className='sub-heading-1st' >Segment</p>
@@ -633,7 +735,7 @@ export const Home = () => {
                             </div>
                             <div className='select-products'>
                                 <p className='sub-heading-1st' >Quantity</p>
-
+                                
                                 <input
                                     name="quantity"
                                     id="quantity"
@@ -645,9 +747,10 @@ export const Home = () => {
                                     onChange={handleDetailsCustom}
                                 >
                                 </input>
+                                
                             </div>
 
-                            <div className={`select-products ${ (isPriceVisible === true || strikeAndType===true ) ? 'customDiv' : ''}`}>
+                            <div className={`select-products ${ (!strikeAndType) ? 'customDiv' : ''}`}>
                                     {/* <div className='select-products customDiv'> */}
                                     <p className='sub-heading-1st' >Price</p>
 
@@ -664,8 +767,7 @@ export const Home = () => {
                                     </input>
                             </div>
 
-                            { !strikeAndType &&  <div className='select-products'></div> }
-                           
+                          
                         </div>
 
                       
@@ -702,7 +804,7 @@ export const Home = () => {
                                     type="number"
                                     min={0}
                                     max={10000}
-                                    value={addDetails.strike}
+                                    value={addDetails.premium}
                                     onChange={handleDetailsCustom}
                                 >
                                 </input>
@@ -722,13 +824,12 @@ export const Home = () => {
                                         }
                                     </select>
                                 </div>
-                            <div className='select-products'></div>
-                            <div className='select-products'></div>
-                            <div className='select-products'></div>
+                           
                         </div>
                          <button type="button" onClick={addInstrument} className='next-button'>Add</button>
                       
                       </div> 
+                    }
                     </form>
 
                     <div className='dtable' >
@@ -743,10 +844,10 @@ export const Home = () => {
                                     <th>Expiry</th>
                                     <th>Side</th>
                                     <th>Quantity</th>
-                                    <th> Price</th>
+                                    <th> Price </th>
                                     <th>Strike Price</th>
                                     <th>Premium</th>
-                                    <th>Type</th>
+                                    <th>Type </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -771,27 +872,72 @@ export const Home = () => {
                             </tbody>
                         </table>
                         </form>
-                        {/* <button type='submit' className={`save-skeleton ${table == true ? 'customDiv' : ""} `} onClick={save}>Save</button>
-                         */}
-                        <button type='submit' onClick={makeplot}>Make Plot</button>
 
+                       {
+                           (addDetails) && (addDetails.strategy==='blank') && (!table) &&
+                           <button type="button" className='next-button' onClick={addRow}>Add Row</button>
+                       }
+
+                        {
+                            (!table) &&  
+                            <>
+
+                                <button type='submit' className='next-button' onClick={makeplot}>Make Plot</button>
+
+                                { 
+                                    (isSkeletonSave) && <button type='submit' class="btn btn-outline-dark" data-toggle="modal" data-target="#exampleModalCenter" onClick={saveModalSkeleton}>Save Strategy</button>
+                                }
+
+                                {
+                                    <button type='submit' class="btn btn-outline-dark" data-toggle="modal" data-target="#exampleModalCenter" onClick={saveModal}>Save Implementation</button>
+                                }   
+
+                            </>
+                        }
+
+                    </div>    
                         {plotVisible  && <Plot coordinates= {_coords} vv="aaa"/> }
-
-                        {modal && (
-                            <div className="modal">
-                                <div onClick={toggleModal} className="overlay"></div>
-                                <div className="modal-content">
-                                    <h2>Enter Details</h2>
-                                    <p><input type='text' placeholder='Enter Name' required className='stName'/></p>
-                                    <p><textarea className='stDesc' placeholder='Enter Description' required rows="4" cols="50"></textarea></p>
-                                    <button type='submit' className='save-popup' onClick={saveModal}>OK</button>
-                                    <button className="close-modal" onClick={toggleModal}>
-                                        CLOSE
+                     
+                         
+                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Add Description</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
+                                <div class="modal-body">
+                                
+                            <h4>Enter Details</h4>
+                            {
+                                (console.log("model opne"))
+                            }
+                            { isSkeletonSave  &&
+                            <>
+                            <p><input type='text' id="StrategyName" placeholder='Enter Strategy Name' required class="form-control"/></p>
+                            <p><textarea class="form-control" rows="3" id="DescriptionSkeleton"  placeholder='Enter Strategy Description' required  cols="50"></textarea></p>
+                            </>
+                            }
+
+                            { isImplementationSave &&
+                            <>
+                            <p><input type='text' id="Name" placeholder='Enter Strategy Implementation Name' required class="form-control"/></p>
+                            <p><textarea class="form-control" rows="3" id="Description" placeholder='Enter Implememtation Description' required cols="50"></textarea></p>
+                            </>
+                            }
+
                             </div>
-                        )}
+                        <div class="modal-footer">
+                            
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onClick={saveModalData} data-dismiss="modal" class="btn btn-primary">Save changes</button>
+                        </div>
+                        </div>
                     </div>
+                    </div>
+                    
                 </div>
             </div>
 
