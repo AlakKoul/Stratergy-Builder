@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import StrategyCard from './StrategyCard';
 
+
 export default class AllImplementationsData extends Component {
 
   constructor(){
@@ -12,17 +13,17 @@ export default class AllImplementationsData extends Component {
 
   
 
-  componentDidMount(){
-    //   const url=  "localhost:8000/api/send/allSavedImplemenations"
+  async componentDidMount(){
+      const url=  "http://localhost:8000/api/send/allSavedImplemenations"
       
-    //   const response = await fetch(url , {
-    //     method  : 'GET',
-    //     headers : {
-    //       'Content-Type' : 'application/json'
-    //     }
-    //   });
+      const response = await fetch(url , {
+        method  : 'GET',
+        headers : {
+          'Content-Type' : 'application/json'
+        }
+      });
 
-    //   const json  = await response.json();
+      const json  = await response.json();
     
 
     const res =[
@@ -39,7 +40,7 @@ export default class AllImplementationsData extends Component {
             "DescriptionSkeleton": "A long call option is, simply, your standard call option in which the buyer has the right, but not the obligation, to buy a stock at a strike price in the future. "
         },
         {
-            "Id": 2,
+            "Id": 5,
             "Name": "Sell call option",
             "StockName": "NSE",
             "Ticker": "ABB",
@@ -49,34 +50,11 @@ export default class AllImplementationsData extends Component {
             "InvestmentStrategySkeletonId": 4,
             "StrategyName": "Short Call",
             "DescriptionSkeleton": "In a short call option, the seller promises to sell their shares at a fixed strike price in the future. "
-        },
-        {
-            "Id": 3,
-            "Name": "Minimum Loss AARTI IND",
-            "StockName": "NSE",
-            "Ticker": "AARTIIND",
-            "ExpiryDate": "2022-04-01T18:30:00.000Z",
-            "userId": 2,
-            "Description": "Buying Call and Put at almost same strike price",
-            "InvestmentStrategySkeletonId": 5,
-            "StrategyName": "Minimum Loss",
-            "DescriptionSkeleton": "Buy Call and Put Option at same time and almost equal strike price"
-        },
-        {
-            "Id": 4,
-            "Name": "",
-            "StockName": "NSE",
-            "Ticker": "AAPL",
-            "ExpiryDate": "2022-04-09T18:30:00.000Z",
-            "userId": 2,
-            "Description": " ",
-            "InvestmentStrategySkeletonId": 3,
-            "StrategyName": "Long Call",
-            "DescriptionSkeleton": "A long call option is, simply, your standard call option in which the buyer has the right, but not the obligation, to buy a stock at a strike price in the future. "
         }
     ]
 
-    this.setState({implementationsData : res});
+    this.setState({implementationsData : json});
+    console.log(json);
   }
 
   render() {

@@ -476,6 +476,7 @@ export const Home = () => {
         let instruments = [];
         for (let i in details) {
             let instObj = {
+                "SkeletonId" : details[i].id,
                 "segment": details[i].segment,
                 "Side": details[i].side,
                 "Quantity": details[i].quantity,
@@ -496,7 +497,7 @@ export const Home = () => {
             "Ticker": details[0].ticker,
             "listInstruments": instruments,
             "InvestmentStrategySkeletonId" : skeletonId,
-            "isSkeletonSaved" : !isSkeletonSave
+            "isSkeletonSaved" : !isSkeletonSave,
         }
         return newCustomStrategy;
     }
