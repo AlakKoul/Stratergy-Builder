@@ -886,11 +886,11 @@ export const Home = () => {
                                 <button type='submit' className='next-button' onClick={makeplot}>Make Plot</button>
 
                                 { 
-                                    (isSkeletonSave) && <button type='submit' class="btn btn-outline-dark" data-toggle="modal" data-target="#exampleModalCenter" onClick={saveModalSkeleton}>Save Strategy</button>
+                                    (isSkeletonSave) && <button type='submit'  className='next-button' data-toggle="modal" data-target="#exampleModalCenter" onClick={saveModalSkeleton}>Save Strategy</button>
                                 }
 
                                 {
-                                    <button type='submit' class="btn btn-outline-dark" data-toggle="modal" data-target="#exampleModalCenter" onClick={saveModal}>Save Implementation</button>
+                                    <button type='submit'  className='next-button' data-toggle="modal" data-target="#exampleModalCenter" onClick={saveModal}>Save Implementation</button>
                                 }   
 
                             </>

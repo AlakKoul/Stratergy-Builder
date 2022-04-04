@@ -51,12 +51,6 @@ clicked = async () => {
   
 
   if(true && !this.state.toggle){
-   //var res1 = await this.fetchData(this.state.id);
-    // var result = await this.makePlot(this.state.id);
-   
-    // this.setState({data : result});
-    // console.log(this.state)
-    
 
   }
   this.setState({ toggle: !(this.state.toggle) })

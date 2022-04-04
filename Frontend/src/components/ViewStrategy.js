@@ -114,7 +114,6 @@ export const ViewStrategy =  (props) => {
             <div>
             <h2>Graph</h2>
             <Plot coordinates= {_coords} vv="aaa"/>
-            
             </div>
         </>
     )

@@ -28,6 +28,7 @@ export const Login = () => {
 
   const handleSubmit = async (e)=>{
     e.preventDefault(); 
+    console.log("...")
     const response = await fetch("http://localhost:8000/api/auth/login", {
         method: 'POST',
         headers: {

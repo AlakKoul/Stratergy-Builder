@@ -28,7 +28,8 @@ export default class Nav extends Component {
                 </div>
                 <div className='navbar-open'>
                     <i class="fa-solid fa-xmark fa-2x" onClick={this.closeNavbar}></i>
-                    <Link className="side-nav-link" to='/read-p-strategy'>Read about Popular Strategies</Link>
+                    {/* <Link className="side-nav-link" to='/read-p-strategy'>Read about Popular Strategies</Link>
+                     */}
                     <Link className="side-nav-link" to='/Implementations'>View Saved Strategies</Link>
                     <Link className="side-nav-link" to='/login'>Logout</Link>
                 </div>

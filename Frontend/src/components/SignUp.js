@@ -1,9 +1,9 @@
   import React, { useEffect, useState } from 'react'
-  import {Link} from "react-router-dom";
+  import {Link ,useHistory} from "react-router-dom";
   import '../styles/LoginAndSignUp.css'
 
 export const SignUp = () => {
-
+  const history = useHistory();
   const [isVisible, setVisible] = useState(false);
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
@@ -25,6 +25,7 @@ export const SignUp = () => {
     console.log(json);
     if (!json.err){
         console.log("register Successfull")
+        history.push('/home');
     }
     else{
         console.log(json);

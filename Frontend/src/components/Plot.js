@@ -9,11 +9,13 @@ export const Plot = (props) => {
       
       var coordinates = props.coordinates;
       console.log(props);
-  
-      // var coordinates = {
-      //   xCoord : [20,30],
-      //   yCoord : [30,50]
-      // }
+      
+      if(coordinates.xCoord.length==0){
+      var coordinate = {
+        xCoord : [20,30],
+        yCoord : [30,50]
+      }
+    }
       console.log("startttt")
   
       for(let i in coordinates.xCoords){
@@ -26,11 +28,12 @@ export const Plot = (props) => {
         legend: 'none'
       }
   return (
-    <div>
-        <h2>React Scatter Chart Example</h2>
+    <div style={{margin:"50px"}}>
+        <h4>React Scatter Chart Example</h4>
         <Chart
-          width={'700px'}
-          height={'420px'}
+          width={'70em'}
+          height={'45em'}
+          margin={'auto'}
           chartType="ScatterChart"
           loader={<div>Loading Chart</div>}
           data={scatterData}

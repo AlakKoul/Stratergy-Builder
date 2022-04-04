@@ -29,19 +29,19 @@ h2, h1{
 .allImplementations{
     padding:3% 10%;
 }
-.card{
+/* .card{
     border: 2px solid grey;
     border-radius: 5px;
     background-color: white;
-}
+} */
 .all-imp{
     margin:3% auto;
 }
-.card-header{
+/* .card-header{
     background-color: rgb(183, 179, 179);
     padding: 1% 1%;
     font-size: larger;
-}
+} */
 .card-body{
     line-height: 2em;
     padding: 1% 1%;

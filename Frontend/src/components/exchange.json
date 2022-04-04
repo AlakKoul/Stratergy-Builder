@@ -5,18 +5,6 @@
     },
     {
         "id" : "1",
-        "name" : "NSE"
-    },
-    {
-        "id" : "2",
-        "name" : "MCX"
-    },
-    {
-        "id" : "1",
-        "name" : "BSE Currency"
-    },
-    {
-        "id" : "2",
-        "name" : "NSE Currency"
+        "name" : "NASDAQ"
     }
 ]
