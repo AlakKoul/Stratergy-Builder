@@ -2,8 +2,8 @@
     display: none;
 }
 .main{
-    margin: 8% 10% 3% 18%;
-    width:70vw;
+    margin: 8% 13% 3%;
+    width:80vw;
 }
 .nav{
     position: fixed;
@@ -22,7 +22,7 @@
     margin:15px 10px;
 }
 .navbar-open{
-    width:14vw;
+    width:12vw;
 }
 
 .side-nav-link{
@@ -56,14 +56,12 @@
     margin: 0% 3%;
 }
 .products{
-    margin-top: 7%;
     width:100%;
     border-radius: 0.5em;
     height:3.5em;
     border: 2px solid rgb(61, 61, 61);
     outline: none;
     box-shadow: none;
-    appearance: none;
     padding:2%;
 }
 .products:hover, .products:focus{
