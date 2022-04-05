@@ -8,7 +8,7 @@ export const Navbar = () => {
     <nav>
       <ul className='nav-list'>
         <li>
-          <h1 className='logo'>Stratergy Builder <span className="fa-rotate-by" style={{'display':'inline-block', '--fa-rotate-angle':'135deg'}}>
+          <h1 className='logo'>Strategy Builder <span className="fa-rotate-by" style={{'display':'inline-block', '--fa-rotate-angle':'135deg'}}>
             <i className="fa-solid fa-share fa-flip-horizontal "></i>
             </span></h1>
         </li>

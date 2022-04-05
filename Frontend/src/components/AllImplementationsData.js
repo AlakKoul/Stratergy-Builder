@@ -24,34 +24,6 @@ export default class AllImplementationsData extends Component {
       });
 
       const json  = await response.json();
-    
-
-    const res =[
-        {
-            "Id": 1,
-            "Name": "Buy Call",
-            "StockName": "NSE",
-            "Ticker": "AARTIIND",
-            "ExpiryDate": "2022-03-30T18:30:00.000Z",
-            "userId": 2,
-            "Description": "Buy the call option",
-            "InvestmentStrategySkeletonId": 3,
-            "StrategyName": "Long Call",
-            "DescriptionSkeleton": "A long call option is, simply, your standard call option in which the buyer has the right, but not the obligation, to buy a stock at a strike price in the future. "
-        },
-        {
-            "Id": 5,
-            "Name": "Sell call option",
-            "StockName": "NSE",
-            "Ticker": "ABB",
-            "ExpiryDate": "2022-03-29T18:30:00.000Z",
-            "userId": 2,
-            "Description": "Selling the call option",
-            "InvestmentStrategySkeletonId": 4,
-            "StrategyName": "Short Call",
-            "DescriptionSkeleton": "In a short call option, the seller promises to sell their shares at a fixed strike price in the future. "
-        }
-    ]
 
     this.setState({implementationsData : json});
     console.log(json);
@@ -63,9 +35,7 @@ export default class AllImplementationsData extends Component {
       <div className='allImplementations'>
       <h1 className='all-imp'> Strategy Implementations </h1>
 
-        <div >
-          
-            
+        <div >            
             <div>
               {this.state.implementationsData.map((element)=>{
                 return <div key={element.Id}>

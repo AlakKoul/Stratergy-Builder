@@ -5,7 +5,7 @@
     border-radius: 15px;
     padding-left: 1.2em;
     padding-right: 1.2em;
-    background-color: white;
+    background-color: #b4d6c1;
     border-width: 0vh;
 }
 .signup-component, .login-component{
@@ -61,7 +61,7 @@
     border: 2px solid #559aaa;
     outline: none;
     box-shadow: none;
-    color: #559aaa;
+    color: #009879;
     font-weight: bolder;
     border-radius: 7px;
     background-color: white;
@@ -69,7 +69,7 @@
 
 .signup-btn:hover, .login-btn:hover{
     color: white;
-    background-color: #559aaa ;
+    background-color: #009879 ;
     cursor: pointer;
     transition: all 0.4s ease-in-out;
 }

@@ -41,13 +41,8 @@ const SavedSkeleton = async (id) =>{
       tempList.push(insTemp);
       console.log(insTemp);
   }
-  console.log(tempList);
+
   detail.instruments = tempList;
-  console.log("instruments ================");
-  console.log(detail.instruments);
-  
-  
-  
   
   var arr = [];
   arr.push(detail);

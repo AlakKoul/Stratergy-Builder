@@ -30,11 +30,11 @@ export const Home = () => {
     const [customStrategies,setcustomStrategies] = useState( [
         {
             "id" : "1",
-            "name" : "abc"
+            "name" : " "
         },
         {
             "id" : "2",
-            "name" : "blank"
+            "name" : "Blank"
         }
     ]);
 
@@ -50,15 +50,11 @@ export const Home = () => {
     const [popularStrategies,setpopularStrategies] = useState([
         {
             "id" : "0",
-            "name" : "put call"
+            "name" : " "
         },
         {
             "id" : "1",
-            "name" : "PUT BUY"
-        },
-        {
-            "id" : "2",
-            "name" : "put buy"
+            "name" : " "
         }
     ])
   
@@ -69,13 +65,16 @@ export const Home = () => {
     
     const addRow = () => {
         if(custom)   setCustom(false);
-
+       
 
     }
     
     const handleRadioClick = async (event) => {
         setDetails([]);
         showTable(true);
+        if(event.target.value=='popular'){
+            setIsSkeletonSave(false)
+        }
         setSelectedRadioBtn(event.target.value);
     }
     //const dataVal = {type:'',}
@@ -137,7 +136,7 @@ export const Home = () => {
             var temp = await customStrategiesName();
             var b = {
                 "id" : "0",
-                "name" : "blank"
+                "name" : "Blank"
             }
             temp = [t , ... temp]
             temp.push(b);
@@ -379,7 +378,7 @@ export const Home = () => {
         console.log(addDetails.strategy);
         setNextButtonVisibility(false);
         console.log(addDetails.strategy)
-        if(addDetails.strategy === 'blank'){
+        if(addDetails.strategy === 'Blank'){
             setCustom(false);
             return
         }
@@ -395,7 +394,7 @@ export const Home = () => {
             
             fetchData("strategy", popularStrategies);
         }
-        else if (selectedRadioBtn === 'custom' && addDetails.strategy !== 'blank') {
+        else if (selectedRadioBtn === 'custom' && addDetails.strategy !== 'Blank') {
             fetchData("strategy", customStrategies);
         }
        
@@ -875,7 +874,7 @@ export const Home = () => {
                         </form>
 
                        {
-                           (addDetails) && (addDetails.strategy==='blank') && (!table) &&
+                           (addDetails) && (addDetails.strategy==='Blank' || selectedRadioBtn=='custom' ) && (!table) &&
                            <button type="button" className='next-button' onClick={addRow}>Add Row</button>
                        }
 

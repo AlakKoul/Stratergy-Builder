@@ -31,13 +31,16 @@ export const Login = () => {
     console.log("...")
     const response = await fetch("http://localhost:8000/api/auth/login", {
         method: 'POST',
+        
+     //   credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({email, password})
     });
-    const json = await response.json()
-    console.log(json);
+    const json =  response.json
+    console.log("json")
+    console.log(response);
     if (!(json.err)){
       console.log(json);
         console.log("Login Successfull");

@@ -10,7 +10,6 @@ import { useEffect } from 'react';
 export const ViewStrategy =  (props) => {
     let location = useLocation();
 
-
     const makePlot = async(id) =>{
         const SavedStrategyImplementation = async (id) =>{
             try{
@@ -22,6 +21,7 @@ export const ViewStrategy =  (props) => {
                 body: JSON.stringify({id : id})
               });
              var json = await response.json()
+             
               return json
         }catch(err){
             alert(err)
@@ -32,12 +32,22 @@ export const ViewStrategy =  (props) => {
      setDetails(data.values.listInstruments);
 
      var json = data.values
+    console.log(json)
+     var date = new Date(json.ExpiryDate);
+     var d = date.toLocaleDateString()
+     
+     console.log(d)
 
      var common = {
         "Exchange" : json.StockName,
         "Ticker" : json.Ticker,
-        "ExpiryDate" : json.ExpiryDate,
-        "InstrumentSkeletonId" : json.InvestmentStrategySkeletonId
+        "ExpiryDate" : d,
+        "InstrumentSkeletonId" : json.InvestmentStrategySkeletonId,
+        "Name" : json.Name,
+        "Description" : json.Description,
+        "DescriptionSkeleton" : json.DescriptionSkeleton,
+        "StrategyName" : json.StrategyName
+
     }
 
     setCommon(common);
@@ -56,7 +66,12 @@ export const ViewStrategy =  (props) => {
         "Exchange" : "",
         "Ticker" : "",
         "ExpiryDate" : "",
-        "InstrumentSkeletonId" : ""
+        "InstrumentSkeletonId" : "",
+        "Name" : "",
+        "StrategyName" : "",
+        "DescriptionSkeleton" : "",
+        "Description" : ""
+
     });
     const [_coords , setCoords] = useState({
         "xCoords" : [],
@@ -70,15 +85,20 @@ export const ViewStrategy =  (props) => {
          console.log(commonValues);
     },[])
 
-    // var details = data.values.listInstruments;
-    // 
-   
-    // var _coords = 
+  
     
     return (
         <>
-       
-            <div style={{margin : "50px"}}>
+               <div class="card" id='view-card' style={{margin : "50px"}}>
+              <h5 class="card-header">{commonValues.Name}</h5>
+              <div class="card-body">
+                <p class="card-title"><b>Strategy</b>: {commonValues.StrategyName}</p>
+                <p class="card-text"> <b>Strategy Description</b> : {commonValues.DescriptionSkeleton}</p>
+                <p class="card-text"> <b>Description</b> : {commonValues.Description}</p>
+              </div>
+            </div>
+
+            <div style={{width:'85%',margin:"90px"}}>
                 <table className='view-table'>
                     <thead>
                         <tr>

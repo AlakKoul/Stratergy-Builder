@@ -9,7 +9,7 @@ export default class StockSelectedCard extends Component {
     return (
       <>
            <div class="card">
-            
+           <p class="card-header"> </p>
                 <div class="card-body">
 
                     <div style={{position:"absolute" , right : "15px"}}>
@@ -18,6 +18,7 @@ export default class StockSelectedCard extends Component {
                       </svg>
                     </div>
 
+                    
                     { 
                        (desc) && (desc.StrategyName!=='') &&
                        <p class="card-text"> <b>StrategyName</b> : {desc.StrategyName}</p> 
