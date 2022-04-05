@@ -20,7 +20,9 @@ export const Navbar = () => {
           {
              (location.pathname==='/home') 
              && 
-              <h1></h1>
+             <div className='userName'>
+               <p >A</p>
+             </div>
           }
         </li>
       </ul>
