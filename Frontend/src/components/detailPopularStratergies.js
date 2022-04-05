@@ -46,14 +46,8 @@ const SavedSkeleton = async (id) =>{
   
   var arr = [];
   arr.push(detail);
-  
-  console.log("finall");
-  console.log(arr);
-  
-  
     return arr;
-  
-   
+
   }
   
   

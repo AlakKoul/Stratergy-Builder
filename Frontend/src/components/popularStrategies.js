@@ -39,26 +39,3 @@ module.exports = popularStrategyName
 
 
 
-
-
-
-/*[
-    {
-        "id":1,
-        "name": "str1"
-    },
-    {
-        "id":2,
-        "name": "str2"
-    },
-    {
-        "id":3,
-        "name": "str3"
-    },
-    {
-        "id":4,
-        "name": "str4"
-    }
-]
-
-*/

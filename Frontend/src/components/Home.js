@@ -14,7 +14,6 @@ import { ReadOnlyRow } from './ReadOnlyRow'
 import makePlotFunction from './plots'
 import { Plot } from './Plot'
 import { EditableRow } from './EditableRow'
-import SavedStrategyImplementation from './StrategyImplementationData';
 import Nav from './Nav'
 import StockSelectedCard from './StockSelectedCard'
 
@@ -550,18 +549,11 @@ export const Home = () => {
             "StrategyName": (stName!=="") ? stName : desc.StrategyName,
             "DescriptionSkeleton" : (stDesc!=="") ? stDesc : desc.DescriptionSkeleton
         }
-      
-        console.log(obj)
 
-        
         setDesc(obj);
-        console.log(desc);
-        console.log("save")
-      
+
         var newCustomStrategy = changeFormatToSend(obj);
         var response = await sendDataToBackend(newCustomStrategy,isImplementationSave);
-        
-        console.log(newCustomStrategy);
 
         if(isImplementationSave) setIsImplementationSave(false);
         if(isSkeletonSave) setIsSkeletonSave(false);
@@ -574,7 +566,6 @@ export const Home = () => {
     return (
         <>
            
-
            {
                alertt && 
                <div class="alert alert-primary" role="alert">

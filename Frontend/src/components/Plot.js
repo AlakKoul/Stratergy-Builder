@@ -8,15 +8,6 @@ export const Plot = (props) => {
       ]
       
       var coordinates = props.coordinates;
-      console.log(props);
-      
-    //   if(coordinates.xCoord.length==0){
-    //   var coordinate = {
-    //     xCoord : [20,30],
-    //     yCoord : [30,50]
-    //   }
-    // }
-      console.log("startttt")
   
       for(let i in coordinates.xCoords){
         scatterData.push([coordinates.xCoords[i], coordinates.yCoords[i]]);

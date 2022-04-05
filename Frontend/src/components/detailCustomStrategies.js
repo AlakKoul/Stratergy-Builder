@@ -40,22 +40,13 @@ for(let i in list){
     tempList.push(insTemp);
     console.log(insTemp);
 }
-console.log(tempList);
-detail.instruments = tempList;
-console.log("instruments ================");
-console.log(detail.instruments);
+    console.log(tempList);
+    detail.instruments = tempList;
 
+    var arr = [];
+    arr.push(detail);
 
-
-
-var arr = [];
-arr.push(detail);
-
-console.log("finall");
-console.log(arr);
-
-
-  return arr;
+      return arr;
 
  
 }

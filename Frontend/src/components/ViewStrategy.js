@@ -56,11 +56,7 @@ export const ViewStrategy =  (props) => {
     }
     console.log()
     var str = (location.search && location.search.substring(1)) ? location.search.substring(1) : "0"; 
-    //let  data = await makePlot(str)
-
-    // // var details = [];
-    // // var commonValues = {"a" : "5"};
-
+   
     const [details , setDetails] = useState([])
     const [commonValues,setCommon] = useState({
         "Exchange" : "",
